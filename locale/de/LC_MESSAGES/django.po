@@ -1,0 +1,202 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-24 06:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=2; plural=(n != 1);\n"
+
+#: inventory/models.py:30
+msgid "Location"
+msgstr "Standort"
+
+#: inventory/models.py:31 templates/inventory/home.html:116
+msgid "Locations"
+msgstr "Standorte"
+
+#: inventory/models.py:50
+msgid "Quantity must be greater than 0"
+msgstr "Die Menge muss größer als 0 sein"
+
+#: inventory/models.py:52
+msgid "Quantity is too large (max 10000)"
+msgstr "Die Menge ist zu groß (max. 10000)"
+
+#: inventory/models.py:66
+msgid "Item"
+msgstr "Artikel"
+
+#: inventory/models.py:67 templates/inventory/home.html:120
+#: templates/inventory/location_detail.html:173
+#: templates/inventory/location_detail.html:194
+#: templates/inventory/location_detail.html:203
+#: templates/inventory/location_list.html:173
+msgid "Items"
+msgstr "Artikel"
+
+#: inventory/models.py:86
+msgid "Item Log"
+msgstr "Artikelprotokoll"
+
+#: inventory/models.py:87
+msgid "Item Logs"
+msgstr "Artikelprotokolle"
+
+#: templates/inventory/home.html:3 templates/inventory/home.html:111
+#: templates/inventory/location_detail.html:3
+#: templates/inventory/location_list.html:3
+msgid "Home Inventory"
+msgstr "Haushaltsinventar"
+
+#: templates/inventory/home.html:112
+msgid "Manage your home inventory efficiently"
+msgstr "Verwalten Sie Ihr Haushaltsinventar effizient"
+
+#: templates/inventory/home.html:124 templates/inventory/location_list.html:3
+msgid "All Locations"
+msgstr "Alle Standorte"
+
+#: templates/inventory/home.html:125
+msgid "All Items"
+msgstr "Alle Artikel"
+
+#: templates/inventory/home.html:126 templates/inventory/location_list.html:126
+msgid "Search"
+msgstr "Suche"
+
+#: templates/inventory/home.html:127
+msgid "Admin Panel"
+msgstr "Administrationsbereich"
+
+#: templates/inventory/home.html:132
+msgid "Main Locations"
+msgstr "Hauptstandorte"
+
+#: templates/inventory/home.html:149
+msgid "No locations yet. Add some in the admin panel!"
+msgstr ""
+"Noch keine Standorte. Fügen Sie einige im Administrationsbereich hinzu!"
+
+#: templates/inventory/location_detail.html:144
+#: templates/inventory/location_list.html:121
+msgid "Back to Home"
+msgstr "Zurück zur Startseite"
+
+#: templates/inventory/location_detail.html:160
+#: templates/inventory/location_list.html:130
+#: templates/inventory/location_list.html:151
+msgid "Room Type"
+msgstr "Raumtyp"
+
+#: templates/inventory/location_detail.html:165
+#: templates/inventory/location_detail.html:192
+#: templates/inventory/location_list.html:171
+msgid "Box"
+msgstr "Kiste"
+
+#: templates/inventory/location_detail.html:169
+msgid "Room"
+msgstr "Raum"
+
+#: templates/inventory/location_detail.html:176
+#: templates/inventory/location_detail.html:183
+msgid "Sub-locations"
+msgstr "Unterstandorte"
+
+#: templates/inventory/location_detail.html:189
+#: templates/inventory/location_list.html:165
+msgid "Type"
+msgstr "Typ"
+
+#: templates/inventory/location_detail.html:216
+msgid "Quantity"
+msgstr "Menge"
+
+#: templates/inventory/location_detail.html:217
+msgid "Condition"
+msgstr "Zustand"
+
+#: templates/inventory/location_detail.html:226
+msgid "No items in this location yet."
+msgstr "Noch keine Artikel an diesem Standort."
+
+#: templates/inventory/location_list.html:127
+msgid "Search locations..."
+msgstr "Standorte suchen..."
+
+#: templates/inventory/location_list.html:132
+msgid "All Types"
+msgstr "Alle Typen"
+
+#: templates/inventory/location_list.html:139
+msgid "Is Box"
+msgstr "Ist Kiste"
+
+#: templates/inventory/location_list.html:141
+msgid "All"
+msgstr "Alle"
+
+#: templates/inventory/location_list.html:142
+msgid "Boxes Only"
+msgstr "Nur Kisten"
+
+#: templates/inventory/location_list.html:143
+msgid "Non-Boxes Only"
+msgstr "Nur Nicht-Kisten"
+
+#: templates/inventory/location_list.html:147
+msgid "Sort By"
+msgstr "Sortieren nach"
+
+#: templates/inventory/location_list.html:149
+msgid "Name"
+msgstr "Name"
+
+#: templates/inventory/location_list.html:150
+msgid "Name (Z-A)"
+msgstr "Name (Z-A)"
+
+#: templates/inventory/location_list.html:155
+msgid "Filter"
+msgstr "Filtern"
+
+#: templates/inventory/location_list.html:168
+msgid "Parent"
+msgstr "Übergeordnet"
+
+#: templates/inventory/location_list.html:177
+msgid "No locations found."
+msgstr "Keine Standorte gefunden."
+
+#: templates/inventory/location_list.html:185
+msgid "First"
+msgstr "Erste"
+
+#: templates/inventory/location_list.html:186
+msgid "Previous"
+msgstr "Vorherige"
+
+#: templates/inventory/location_list.html:189
+#, python-format
+msgid "Page %(page)s of %(total)s"
+msgstr "Seite %(page)s von %(total)s"
+
+#: templates/inventory/location_list.html:192
+msgid "Next"
+msgstr "Nächste"
+
+#: templates/inventory/location_list.html:193
+msgid "Last"
+msgstr "Letzte"

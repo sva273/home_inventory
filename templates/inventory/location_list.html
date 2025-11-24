@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "All Locations" %} - {% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        .back-link:hover {
+            background: #f8f9fa;
+        }
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        .filters form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-group label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+        }
+        .filter-group input,
+        .filter-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        .filter-group button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        .filter-group button:hover {
+            background: #5568d3;
+        }
+        .locations-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+        .location-card {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #667eea;
+        }
+        .location-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .location-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.3em;
+        }
+        .location-card p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .pagination {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pagination a,
+        .pagination span {
+            padding: 8px 15px;
+            background: #f8f9fa;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .pagination .current {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <a href="{% url 'home' %}" class="back-link">← {% trans "Back to Home" %}</a>
+
+        <div class="filters">
+            <form method="get">
+                <div class="filter-group">
+                    <label>{% trans "Search" %}</label>
+                    <input type="text" name="search" value="{{ current_search|default:'' }}" placeholder="{% trans 'Search locations...' %}">
+                </div>
+                <div class="filter-group">
+                    <label>{% trans "Room Type" %}</label>
+                    <select name="room_type">
+                        <option value="">{% trans "All Types" %}</option>
+                        {% for value, label in room_choices %}
+                            <option value="{{ value }}" {% if current_room_type == value %}selected{% endif %}>{{ label }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>{% trans "Is Box" %}</label>
+                    <select name="is_box">
+                        <option value="">{% trans "All" %}</option>
+                        <option value="true" {% if current_is_box == 'true' %}selected{% endif %}>{% trans "Boxes Only" %}</option>
+                        <option value="false" {% if current_is_box == 'false' %}selected{% endif %}>{% trans "Non-Boxes Only" %}</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>{% trans "Sort By" %}</label>
+                    <select name="sort">
+                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>{% trans "Name" %}</option>
+                        <option value="-name" {% if current_sort == '-name' %}selected{% endif %}>{% trans "Name (Z-A)" %}</option>
+                        <option value="room_type" {% if current_sort == 'room_type' %}selected{% endif %}>{% trans "Room Type" %}</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button type="submit">{% trans "Filter" %}</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="locations-grid">
+            {% for location in page_obj %}
+                <a href="{% url 'location_detail' location.id %}" class="location-card">
+                    <h3>{{ location.name }}</h3>
+                    {% if location.room_type %}
+                        <p><strong>{% trans "Type" %}:</strong> {{ location.get_room_type_display }}</p>
+                    {% endif %}
+                    {% if location.parent %}
+                        <p><strong>{% trans "Parent" %}:</strong> {{ location.parent.name }}</p>
+                    {% endif %}
+                    {% if location.is_box %}
+                        <p>📦 <strong>{% trans "Box" %}</strong></p>
+                    {% endif %}
+                    <p><strong>{% trans "Items" %}:</strong> {{ location.items.count }}</p>
+                </a>
+            {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 10px;">
+                    <p>{% trans "No locations found." %}</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_room_type %}&room_type={{ current_room_type }}{% endif %}{% if current_is_box %}&is_box={{ current_is_box }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "First" %}</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_room_type %}&room_type={{ current_room_type }}{% endif %}{% if current_is_box %}&is_box={{ current_is_box }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Previous" %}</a>
+            {% endif %}
+            
+            <span class="current">{% blocktrans with page=page_obj.number total=page_obj.paginator.num_pages %}Page {{ page }} of {{ total }}{% endblocktrans %}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_room_type %}&room_type={{ current_room_type }}{% endif %}{% if current_is_box %}&is_box={{ current_is_box }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Next" %}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_room_type %}&room_type={{ current_room_type }}{% endif %}{% if current_is_box %}&is_box={{ current_is_box }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Last" %}</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+{% endblock %}
+

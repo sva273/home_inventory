@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>All Items - Home Inventory</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .back-link {
+            display: inline-block;
+            margin-bottom: 20px;
+            padding: 10px 20px;
+            background: white;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        .back-link:hover {
+            background: #f8f9fa;
+        }
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+        }
+        .filters form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-group label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+        }
+        .filter-group input,
+        .filter-group select {
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 1em;
+        }
+        .filter-group button {
+            padding: 10px 20px;
+            background: #667eea;
+            color: white;
+            border: none;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 1em;
+            transition: background 0.3s;
+        }
+        .filter-group button:hover {
+            background: #5568d3;
+        }
+        .items-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+        .item-card {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            text-decoration: none;
+            color: inherit;
+            transition: transform 0.2s, box-shadow 0.2s;
+            border-left: 4px solid #667eea;
+        }
+        .item-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        }
+        .item-image {
+            width: 100%;
+            height: 150px;
+            object-fit: cover;
+            border-radius: 6px;
+            margin-bottom: 15px;
+        }
+        .image-placeholder {
+            width: 100%;
+            height: 150px;
+            background: #f8f9fa;
+            border-radius: 6px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+        .item-card h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .item-card p {
+            color: #666;
+            margin: 5px 0;
+            font-size: 0.9em;
+        }
+        .pagination {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 30px;
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+        }
+        .pagination a,
+        .pagination span {
+            padding: 8px 15px;
+            background: #f8f9fa;
+            color: #667eea;
+            text-decoration: none;
+            border-radius: 6px;
+        }
+        .pagination .current {
+            background: #667eea;
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+
+        <div class="filters">
+            <form method="get">
+                <div class="filter-group">
+                    <label>Search</label>
+                    <input type="text" name="search" value="{{ current_search|default:'' }}" placeholder="Search items...">
+                </div>
+                <div class="filter-group">
+                    <label>Location</label>
+                    <select name="location">
+                        <option value="">All Locations</option>
+                        {% for loc in locations %}
+                            <option value="{{ loc.id }}" {% if current_location == loc.id|stringformat:"s" %}selected{% endif %}>{{ loc.name }}</option>
+                        {% endfor %}
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Condition</label>
+                    <select name="condition">
+                        <option value="">All Conditions</option>
+                        <option value="excellent" {% if current_condition == 'excellent' %}selected{% endif %}>Excellent</option>
+                        <option value="good" {% if current_condition == 'good' %}selected{% endif %}>Good</option>
+                        <option value="fair" {% if current_condition == 'fair' %}selected{% endif %}>Fair</option>
+                        <option value="damaged" {% if current_condition == 'damaged' %}selected{% endif %}>Damaged</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <label>Sort By</label>
+                    <select name="sort">
+                        <option value="-created_at" {% if current_sort == '-created_at' %}selected{% endif %}>Newest First</option>
+                        <option value="created_at" {% if current_sort == 'created_at' %}selected{% endif %}>Oldest First</option>
+                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name (A-Z)</option>
+                        <option value="-name" {% if current_sort == '-name' %}selected{% endif %}>Name (Z-A)</option>
+                    </select>
+                </div>
+                <div class="filter-group">
+                    <button type="submit">Filter</button>
+                </div>
+            </form>
+        </div>
+
+        <div class="items-grid">
+            {% for item in page_obj %}
+                <a href="{% url 'item_detail' item.id %}" class="item-card">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image">
+                    {% else %}
+                        <div class="image-placeholder">📦</div>
+                    {% endif %}
+                    <h3>{{ item.name }}</h3>
+                    {% if item.location %}
+                        <p><strong>Location:</strong> {{ item.location.name }}</p>
+                    {% endif %}
+                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
+                    <p><strong>Condition:</strong> {{ item.condition|title }}</p>
+                </a>
+            {% empty %}
+                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 10px;">
+                    <p>No items found.</p>
+                </div>
+            {% endfor %}
+        </div>
+
+        {% if page_obj.has_other_pages %}
+        <div class="pagination">
+            {% if page_obj.has_previous %}
+                <a href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">First</a>
+                <a href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">Previous</a>
+            {% endif %}
+            
+            <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
+            
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">Next</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">Last</a>
+            {% endif %}
+        </div>
+        {% endif %}
+    </div>
+</body>
+</html>
+

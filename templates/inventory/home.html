@@ -1,0 +1,155 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
+    <style>
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+        .header {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            margin-bottom: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        .stats {
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .stat-card {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            padding: 20px 30px;
+            border-radius: 8px;
+            text-align: center;
+        }
+        .stat-card h3 {
+            font-size: 2em;
+            margin-bottom: 5px;
+        }
+        .stat-card p {
+            opacity: 0.9;
+        }
+        .locations {
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+        }
+        .locations h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .location-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 15px;
+        }
+        .location-item {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
+            transition: transform 0.2s, box-shadow 0.2s;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            cursor: pointer;
+        }
+        .location-item:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            background: #e9ecef;
+        }
+        .location-item a {
+            text-decoration: none;
+            color: inherit;
+        }
+        .location-item h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        .location-item p {
+            color: #666;
+            font-size: 0.9em;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 40px;
+            color: #999;
+        }
+        .admin-link {
+            display: inline-block;
+            margin-top: 20px;
+            padding: 12px 24px;
+            background: #667eea;
+            color: white;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: background 0.3s;
+        }
+        .admin-link:hover {
+            background: #5568d3;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="header">
+            <h1>🏠 {% trans "Home Inventory" %}</h1>
+            <p>{% trans "Manage your home inventory efficiently" %}</p>
+            <div class="stats">
+                <div class="stat-card">
+                    <h3>{{ locations_count }}</h3>
+                    <p>{% trans "Locations" %}</p>
+                </div>
+                <div class="stat-card">
+                    <h3>{{ items_count }}</h3>
+                    <p>{% trans "Items" %}</p>
+                </div>
+            </div>
+            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
+                <a href="{% url 'location_list' %}" class="admin-link">{% trans "All Locations" %}</a>
+                <a href="{% url 'item_list' %}" class="admin-link">{% trans "All Items" %}</a>
+                <a href="{% url 'search' %}" class="admin-link">{% trans "Search" %}</a>
+                <a href="/admin/" class="admin-link">{% trans "Admin Panel" %}</a>
+            </div>
+        </div>
+
+        <div class="locations">
+            <h2>{% trans "Main Locations" %}</h2>
+            {% if locations %}
+                <div class="location-list">
+                    {% for location in locations %}
+                        <a href="{% url 'location_detail' location.id %}" class="location-item">
+                            <h3>{{ location.name }}</h3>
+                            {% if location.room_type %}
+                                <p>Type: {{ location.get_room_type_display }}</p>
+                            {% endif %}
+                            {% if location.is_box %}
+                                <p>📦 Box</p>
+                            {% endif %}
+                        </a>
+                    {% endfor %}
+                </div>
+            {% else %}
+                <div class="empty-state">
+                    <p>{% trans "No locations yet. Add some in the admin panel!" %}</p>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+

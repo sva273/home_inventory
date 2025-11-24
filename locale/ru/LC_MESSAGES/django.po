@@ -1,0 +1,203 @@
+# SOME DESCRIPTIVE TITLE.
+# Copyright (C) YEAR THE PACKAGE'S COPYRIGHT HOLDER
+# This file is distributed under the same license as the PACKAGE package.
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: PACKAGE VERSION\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2025-11-24 06:15+0000\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"Plural-Forms: nplurals=4; plural=(n%10==1 && n%100!=11 ? 0 : n%10>=2 && "
+"n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
+"(n%100>=11 && n%100<=14)? 2 : 3);\n"
+
+#: inventory/models.py:30
+msgid "Location"
+msgstr "Локация"
+
+#: inventory/models.py:31 templates/inventory/home.html:116
+msgid "Locations"
+msgstr "Локации"
+
+#: inventory/models.py:50
+msgid "Quantity must be greater than 0"
+msgstr "Количество должно быть больше 0"
+
+#: inventory/models.py:52
+msgid "Quantity is too large (max 10000)"
+msgstr "Количество слишком большое (максимум 10000)"
+
+#: inventory/models.py:66
+msgid "Item"
+msgstr "Предмет"
+
+#: inventory/models.py:67 templates/inventory/home.html:120
+#: templates/inventory/location_detail.html:173
+#: templates/inventory/location_detail.html:194
+#: templates/inventory/location_detail.html:203
+#: templates/inventory/location_list.html:173
+msgid "Items"
+msgstr "Предметы"
+
+#: inventory/models.py:86
+msgid "Item Log"
+msgstr "Журнал действий"
+
+#: inventory/models.py:87
+msgid "Item Logs"
+msgstr "Журналы действий"
+
+#: templates/inventory/home.html:3 templates/inventory/home.html:111
+#: templates/inventory/location_detail.html:3
+#: templates/inventory/location_list.html:3
+msgid "Home Inventory"
+msgstr "Домашний инвентарь"
+
+#: templates/inventory/home.html:112
+msgid "Manage your home inventory efficiently"
+msgstr "Эффективно управляйте домашним инвентарем"
+
+#: templates/inventory/home.html:124 templates/inventory/location_list.html:3
+msgid "All Locations"
+msgstr "Все локации"
+
+#: templates/inventory/home.html:125
+msgid "All Items"
+msgstr "Все предметы"
+
+#: templates/inventory/home.html:126 templates/inventory/location_list.html:126
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/inventory/home.html:127
+msgid "Admin Panel"
+msgstr "Панель администратора"
+
+#: templates/inventory/home.html:132
+msgid "Main Locations"
+msgstr "Основные локации"
+
+#: templates/inventory/home.html:149
+msgid "No locations yet. Add some in the admin panel!"
+msgstr "Пока нет локаций. Добавьте их в панели администратора!"
+
+#: templates/inventory/location_detail.html:144
+#: templates/inventory/location_list.html:121
+msgid "Back to Home"
+msgstr "Вернуться на главную"
+
+#: templates/inventory/location_detail.html:160
+#: templates/inventory/location_list.html:130
+#: templates/inventory/location_list.html:151
+msgid "Room Type"
+msgstr "Тип комнаты"
+
+#: templates/inventory/location_detail.html:165
+#: templates/inventory/location_detail.html:192
+#: templates/inventory/location_list.html:171
+msgid "Box"
+msgstr "Коробка"
+
+#: templates/inventory/location_detail.html:169
+msgid "Room"
+msgstr "Комната"
+
+#: templates/inventory/location_detail.html:176
+#: templates/inventory/location_detail.html:183
+msgid "Sub-locations"
+msgstr "Подлокации"
+
+#: templates/inventory/location_detail.html:189
+#: templates/inventory/location_list.html:165
+msgid "Type"
+msgstr "Тип"
+
+#: templates/inventory/location_detail.html:216
+msgid "Quantity"
+msgstr "Количество"
+
+#: templates/inventory/location_detail.html:217
+msgid "Condition"
+msgstr "Состояние"
+
+#: templates/inventory/location_detail.html:226
+msgid "No items in this location yet."
+msgstr "В этой локации пока нет предметов."
+
+#: templates/inventory/location_list.html:127
+msgid "Search locations..."
+msgstr "Поиск локаций..."
+
+#: templates/inventory/location_list.html:132
+msgid "All Types"
+msgstr "Все типы"
+
+#: templates/inventory/location_list.html:139
+msgid "Is Box"
+msgstr "Является коробкой"
+
+#: templates/inventory/location_list.html:141
+msgid "All"
+msgstr "Все"
+
+#: templates/inventory/location_list.html:142
+msgid "Boxes Only"
+msgstr "Только коробки"
+
+#: templates/inventory/location_list.html:143
+msgid "Non-Boxes Only"
+msgstr "Только не коробки"
+
+#: templates/inventory/location_list.html:147
+msgid "Sort By"
+msgstr "Сортировать по"
+
+#: templates/inventory/location_list.html:149
+msgid "Name"
+msgstr "Название"
+
+#: templates/inventory/location_list.html:150
+msgid "Name (Z-A)"
+msgstr "Название (Я-А)"
+
+#: templates/inventory/location_list.html:155
+msgid "Filter"
+msgstr "Фильтровать"
+
+#: templates/inventory/location_list.html:168
+msgid "Parent"
+msgstr "Родитель"
+
+#: templates/inventory/location_list.html:177
+msgid "No locations found."
+msgstr "Локации не найдены."
+
+#: templates/inventory/location_list.html:185
+msgid "First"
+msgstr "Первая"
+
+#: templates/inventory/location_list.html:186
+msgid "Previous"
+msgstr "Предыдущая"
+
+#: templates/inventory/location_list.html:189
+#, python-format
+msgid "Page %(page)s of %(total)s"
+msgstr "Страница %(page)s из %(total)s"
+
+#: templates/inventory/location_list.html:192
+msgid "Next"
+msgstr "Следующая"
+
+#: templates/inventory/location_list.html:193
+msgid "Last"
+msgstr "Последняя"
