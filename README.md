@@ -46,7 +46,7 @@ A Django-based web application for managing your home inventory. Organize your i
 ### Step 1: Clone the Repository
 
 ```bash
-git clone <repository-url>
+git clone https://github.com/sva273/home_inventory
 cd home_inventory
 ```
 
