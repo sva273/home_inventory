@@ -453,7 +453,12 @@ This project is open source and available under the MIT License.
 
 ## Author
 
-Created for home inventory management.
+** Wjatscheslaw Schwab **
+
+- GitHub: [@sva273](https://github.com/sva273)
+- LinkedIn: www.linkedin.com/in/wjatscheslaw-schwab-15216a310
+
+Created for home inventory management. This project helps you organize and track your home inventory efficiently.
 
 ## Support
 
