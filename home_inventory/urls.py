@@ -31,8 +31,12 @@ schema_view = get_schema_view(
       title="Home Inventory API",
       default_version='v1',
       description="API documentation for Home Inventory Management System. "
-                  "To use the API, first obtain a token by calling `/v1/api/auth/token/` with your username and password. "
-                  "Then include the token in the Authorization header: `Token <your_token>`",
+                  "To use the API:\n"
+                  "1. First, obtain a token by calling `POST /v1/api/auth/token/` with your username and password.\n"
+                  "2. Copy the token from the response.\n"
+                  "3. Click the 'Authorize' button (🔒) at the top of the page.\n"
+                  "4. Enter: `Token <your_token>` (replace <your_token> with the actual token).\n"
+                  "5. Click 'Authorize' and then 'Close'.",
       terms_of_service="https://www.google.com/policies/terms/",
       contact=openapi.Contact(email="contact@homeinventory.local"),
       license=openapi.License(name="MIT License"),

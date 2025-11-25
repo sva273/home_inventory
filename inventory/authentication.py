@@ -26,17 +26,33 @@ class CacheTokenAuthentication(BaseAuthentication):
         """
         Authenticate the request using token from header.
         
-        Token should be in Authorization header: 'Token {token}'
+        Token should be in Authorization header: 'Token {token}' or just '{token}'
         """
         auth_header = request.META.get('HTTP_AUTHORIZATION', '')
         
-        if not auth_header.startswith('Token '):
+        if not auth_header:
             return None
         
-        token = auth_header.split(' ')[1] if len(auth_header.split(' ')) > 1 else None
+        # Try to extract token
+        # Handle formats: "Token <token>", "Bearer <token>", or just "<token>"
+        parts = auth_header.split(' ', 1)
         
-        if not token:
+        if len(parts) == 2:
+            # Has prefix: "Token <token>" or "Bearer <token>"
+            auth_type, token = parts
+            # Accept both 'Token' and 'Bearer' prefixes
+            if auth_type.lower() not in ('token', 'bearer'):
+                return None
+        elif len(parts) == 1:
+            # No prefix, just token
+            token = parts[0]
+        else:
             return None
+        
+        if not token or not token.strip():
+            return None
+        
+        token = token.strip()
         
         # Get user_id from cache
         cache_key = f'{CACHE_KEY_PREFIX}{token}'
@@ -49,6 +65,9 @@ class CacheTokenAuthentication(BaseAuthentication):
             user = User.objects.get(pk=user_id)
         except User.DoesNotExist:
             raise AuthenticationFailed('User not found.')
+        
+        if not user.is_active:
+            raise AuthenticationFailed('User account is disabled.')
         
         return (user, token)
     

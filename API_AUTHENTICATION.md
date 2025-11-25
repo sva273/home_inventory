@@ -111,11 +111,62 @@ All other API endpoints require authentication:
 
 ## Using Swagger UI
 
+### Step 1: Obtain a Token
+
 1. Navigate to `/swagger/` in your browser
-2. Click the "Authorize" button
-3. Enter your token in the format: `Token <your_token>`
-4. Click "Authorize" to authenticate
-5. All API requests will now include your token
+2. Find the `POST /v1/api/auth/token/` endpoint
+3. Click "Try it out"
+4. Enter your credentials in the request body:
+   ```json
+   {
+       "username": "your_username",
+       "password": "your_password"
+   }
+   ```
+5. Click "Execute"
+6. Copy the `token` value from the response (e.g., `"token": "abc123def456..."`)
+
+### Step 2: Authorize in Swagger
+
+1. Click the "Authorize" button (🔒) at the top right of the Swagger UI
+2. In the "Value" field, enter: `Token <your_token>` (replace `<your_token>` with the actual token you copied)
+   - **Important**: You MUST include the word "Token" followed by a space, then your token
+   - Example: `Token abc123def456ghi789...`
+   - **NOT**: `abc123def456...` (missing "Token " prefix)
+   - **NOT**: `Tokenabc123...` (missing space after "Token")
+3. Click "Authorize"
+4. Click "Close"
+5. You should see a green checkmark (✓) next to "Authorize" button indicating you're authenticated
+
+### Step 3: Use Protected Endpoints
+
+Now all API requests will automatically include your token. You can:
+- Test any endpoint by clicking "Try it out"
+- The token will be automatically included in the Authorization header
+- You'll see a green "Authorized" indicator next to the "Authorize" button
+
+### Troubleshooting
+
+**Problem: Can't create token**
+- Make sure you're using the correct username and password
+- Check that the user account is active
+- Verify the endpoint URL is correct: `/v1/api/auth/token/`
+
+**Problem: Token not working / "Authentication credentials were not provided"**
+- **Most common issue**: Make sure you entered the token in the correct format: `Token <your_token>` (with space after "Token")
+  - Correct: `Token abc123def456...`
+  - Wrong: `abc123def456...` (missing "Token " prefix)
+  - Wrong: `Tokenabc123...` (missing space)
+- Check that you clicked "Authorize" and "Close" after entering the token
+- Verify the token is visible in the "Authorize" dialog (you should see it listed)
+- Check that the token hasn't expired (tokens expire after 7 days)
+- Try obtaining a new token
+- Open browser Developer Tools (F12) → Network tab → Check the request headers to see if "Authorization: Token ..." is being sent
+
+**Problem: "Authorize" button not visible**
+- Refresh the Swagger UI page
+- Check browser console for errors
+- Make sure you're accessing `/swagger/` (not `/redoc/`)
 
 ## Python Example
 

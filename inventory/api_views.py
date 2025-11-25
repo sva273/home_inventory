@@ -1,6 +1,7 @@
 from rest_framework import viewsets, filters
 from rest_framework.decorators import action
 from rest_framework.response import Response
+from rest_framework.permissions import IsAuthenticated
 from django_filters.rest_framework import DjangoFilterBackend
 from .models import Location, Item, ItemLog
 from .serializers import (
@@ -30,6 +31,7 @@ class LocationViewSet(viewsets.ModelViewSet):
     Delete a location.
     """
     queryset = Location.objects.all().select_related('parent').prefetch_related('items', 'children')
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['room_type', 'is_box', 'parent']
     search_fields = ['name']
@@ -78,6 +80,7 @@ class ItemViewSet(viewsets.ModelViewSet):
     Delete an item.
     """
     queryset = Item.objects.all().select_related('location')
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['location', 'condition']
     search_fields = ['name', 'description']
@@ -110,6 +113,7 @@ class ItemLogViewSet(viewsets.ReadOnlyModelViewSet):
     """
     queryset = ItemLog.objects.all().select_related('item')
     serializer_class = ItemLogSerializer
+    permission_classes = [IsAuthenticated]
     filter_backends = [DjangoFilterBackend, filters.SearchFilter, filters.OrderingFilter]
     filterset_fields = ['item', 'action']
     search_fields = ['item__name', 'action', 'details']

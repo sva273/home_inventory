@@ -183,8 +183,10 @@ SWAGGER_SETTINGS = {
             'type': 'apiKey',
             'name': 'Authorization',
             'in': 'header',
-            'description': 'Token-based authentication. Format: "Token <your_token>"'
+            'description': 'Token-based authentication. Enter: "Token <your_token>" (include the word "Token" and space before your token)'
         }
     },
     'USE_SESSION_AUTH': False,
+    'LOGIN_URL': '/admin/login/',
+    'LOGOUT_URL': '/admin/logout/',
 }

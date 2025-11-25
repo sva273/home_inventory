@@ -4,6 +4,8 @@ from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 from rest_framework import serializers
 from django.contrib.auth import authenticate, get_user_model
+from drf_yasg.utils import swagger_auto_schema
+from drf_yasg import openapi
 from .authentication import create_token, delete_user_token, refresh_token, get_user_token
 
 User = get_user_model()
@@ -11,10 +13,32 @@ User = get_user_model()
 
 class TokenObtainSerializer(serializers.Serializer):
     """Serializer for token obtain request."""
-    username = serializers.CharField(required=True)
-    password = serializers.CharField(required=True, write_only=True)
+    username = serializers.CharField(required=True, help_text="Username for authentication")
+    password = serializers.CharField(required=True, write_only=True, help_text="Password for authentication")
 
 
+@swagger_auto_schema(
+    method='post',
+    request_body=TokenObtainSerializer,
+    responses={
+        200: openapi.Response(
+            description="Token obtained successfully",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'token': openapi.Schema(type=openapi.TYPE_STRING, description='Authentication token'),
+                    'user_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='User ID'),
+                    'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                    'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email', nullable=True),
+                }
+            )
+        ),
+        400: openapi.Response(description="Invalid request"),
+        401: openapi.Response(description="Invalid credentials"),
+    },
+    operation_summary="Obtain authentication token",
+    operation_description="Get an authentication token by providing username and password. Use this token in the Authorization header as 'Token <your_token>' for authenticated requests."
+)
 @api_view(['POST'])
 @permission_classes([AllowAny])
 def obtain_token(request):
@@ -72,6 +96,24 @@ def obtain_token(request):
     })
 
 
+@swagger_auto_schema(
+    method='post',
+    responses={
+        200: openapi.Response(
+            description="Token revoked successfully",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'message': openapi.Schema(type=openapi.TYPE_STRING, description='Success message'),
+                }
+            )
+        ),
+        401: openapi.Response(description="Unauthorized"),
+    },
+    operation_summary="Revoke authentication token",
+    operation_description="Revoke the current authentication token. Requires authentication.",
+    security=[{'Token': []}]
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def revoke_token(request):
@@ -94,6 +136,25 @@ def revoke_token(request):
     })
 
 
+@swagger_auto_schema(
+    method='post',
+    responses={
+        200: openapi.Response(
+            description="Token refreshed successfully",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'message': openapi.Schema(type=openapi.TYPE_STRING, description='Success message'),
+                }
+            )
+        ),
+        400: openapi.Response(description="Token not found"),
+        401: openapi.Response(description="Invalid or expired token"),
+    },
+    operation_summary="Refresh authentication token",
+    operation_description="Refresh the current authentication token (extend expiration). Requires authentication.",
+    security=[{'Token': []}]
+)
 @api_view(['POST'])
 @permission_classes([IsAuthenticated])
 def refresh_token_view(request):
@@ -128,6 +189,29 @@ def refresh_token_view(request):
         )
 
 
+@swagger_auto_schema(
+    method='get',
+    responses={
+        200: openapi.Response(
+            description="Token information",
+            schema=openapi.Schema(
+                type=openapi.TYPE_OBJECT,
+                properties={
+                    'user_id': openapi.Schema(type=openapi.TYPE_INTEGER, description='User ID'),
+                    'username': openapi.Schema(type=openapi.TYPE_STRING, description='Username'),
+                    'email': openapi.Schema(type=openapi.TYPE_STRING, description='User email', nullable=True),
+                    'is_staff': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='Is staff user'),
+                    'is_superuser': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='Is superuser'),
+                    'authenticated': openapi.Schema(type=openapi.TYPE_BOOLEAN, description='Is authenticated'),
+                }
+            )
+        ),
+        401: openapi.Response(description="Unauthorized"),
+    },
+    operation_summary="Get token information",
+    operation_description="Get information about the current authentication token and user. Requires authentication.",
+    security=[{'Token': []}]
+)
 @api_view(['GET'])
 @permission_classes([IsAuthenticated])
 def token_info(request):
@@ -150,5 +234,6 @@ def token_info(request):
         'email': request.user.email if hasattr(request.user, 'email') else None,
         'is_staff': request.user.is_staff,
         'is_superuser': request.user.is_superuser,
+        'authenticated': request.user.is_authenticated,
     })
 
