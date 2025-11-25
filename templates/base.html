@@ -12,67 +12,232 @@
             box-sizing: border-box;
         }
         body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Helvetica Neue', sans-serif;
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
-            padding: 20px;
+            padding: 0;
+            color: #333;
+            line-height: 1.6;
         }
-        .language-switcher {
-            position: fixed;
-            top: 20px;
-            right: 20px;
-            background: white;
-            padding: 10px 15px;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+        
+        /* Navigation */
+        .navbar {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            padding: 15px 0;
+            box-shadow: 0 2px 20px rgba(0,0,0,0.1);
+            position: sticky;
+            top: 0;
             z-index: 1000;
+            margin-bottom: 30px;
+        }
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 15px;
+        }
+        .nav-brand {
+            font-size: 1.5em;
+            font-weight: 700;
+            color: #667eea;
+            text-decoration: none;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .nav-brand:hover {
+            color: #5568d3;
+        }
+        .nav-links {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            align-items: center;
+        }
+        .nav-link {
+            padding: 8px 16px;
+            color: #333;
+            text-decoration: none;
+            border-radius: 6px;
+            transition: all 0.3s;
+            font-weight: 500;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+        .nav-link:hover {
+            background: #f0f0f0;
+            color: #667eea;
+        }
+        .nav-link.active {
+            background: #667eea;
+            color: white;
+        }
+        
+        /* Language Switcher */
+        .language-switcher {
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .language-switcher form {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             align-items: center;
         }
         .language-switcher select {
-            padding: 5px 10px;
+            padding: 6px 12px;
             border: 1px solid #ddd;
-            border-radius: 4px;
+            border-radius: 6px;
             font-size: 0.9em;
+            background: white;
+            cursor: pointer;
+            transition: border-color 0.3s;
         }
-        .language-switcher button {
-            padding: 5px 15px;
+        .language-switcher select:hover {
+            border-color: #667eea;
+        }
+        .language-switcher select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+        }
+        
+        /* Main Content */
+        .main-content {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px 40px;
+        }
+        
+        /* Responsive */
+        @media (max-width: 768px) {
+            .nav-container {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            .nav-links {
+                width: 100%;
+                justify-content: space-between;
+            }
+            .nav-link {
+                flex: 1;
+                justify-content: center;
+                text-align: center;
+            }
+            .language-switcher {
+                width: 100%;
+                justify-content: flex-end;
+            }
+        }
+        
+        /* Common Styles */
+        .btn {
+            display: inline-block;
+            padding: 12px 24px;
             background: #667eea;
             color: white;
+            text-decoration: none;
+            border-radius: 8px;
             border: none;
-            border-radius: 4px;
             cursor: pointer;
-            font-size: 0.9em;
-            transition: background 0.3s;
+            font-size: 1em;
+            font-weight: 500;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
-        .language-switcher button:hover {
+        .btn:hover {
             background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
+        }
+        .btn-secondary {
+            background: #6c757d;
+            box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+        }
+        .btn-secondary:hover {
+            background: #5a6268;
+            box-shadow: 0 4px 12px rgba(108, 117, 125, 0.4);
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+        }
+        .card:hover {
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+            transform: translateY(-4px);
+        }
+        
+        /* Loading Animation */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        .fade-in {
+            animation: fadeIn 0.5s ease-out;
         }
     </style>
     {% block extra_css %}{% endblock %}
 </head>
 <body>
     {% load i18n %}
-    <div class="language-switcher">
-        <form action="{% url 'set_language' %}" method="post">
-            {% csrf_token %}
-            <select name="language" onchange="this.form.submit()">
-                {% get_current_language as CURRENT_LANGUAGE %}
-                {% get_available_languages as LANGUAGES %}
-                {% for lang_code, lang_name in LANGUAGES %}
-                    <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
-                        {{ lang_name }}
-                    </option>
-                {% endfor %}
-            </select>
-            <input type="hidden" name="next" value="{{ request.path }}">
-        </form>
-    </div>
+    <nav class="navbar">
+        <div class="nav-container">
+            <a href="{% url 'home' %}" class="nav-brand">
+                🏠 {% trans "Home Inventory" %}
+            </a>
+            <div class="nav-links">
+                <a href="{% url 'home' %}" class="nav-link {% if request.resolver_match.url_name == 'home' %}active{% endif %}">
+                    🏠 {% trans "Home" %}
+                </a>
+                <a href="{% url 'location_list' %}" class="nav-link {% if request.resolver_match.url_name == 'location_list' or request.resolver_match.url_name == 'location_detail' %}active{% endif %}">
+                    📍 {% trans "Locations" %}
+                </a>
+                <a href="{% url 'item_list' %}" class="nav-link {% if request.resolver_match.url_name == 'item_list' or request.resolver_match.url_name == 'item_detail' %}active{% endif %}">
+                    📦 {% trans "Items" %}
+                </a>
+                <a href="{% url 'search' %}" class="nav-link {% if request.resolver_match.url_name == 'search' %}active{% endif %}">
+                    🔍 {% trans "Search" %}
+                </a>
+                <a href="/admin/" class="nav-link">
+                    ⚙️ {% trans "Admin" %}
+                </a>
+            </div>
+            <div class="language-switcher">
+                <form action="{% url 'set_language' %}" method="post">
+                    {% csrf_token %}
+                    <select name="language" onchange="this.form.submit()">
+                        {% get_current_language as CURRENT_LANGUAGE %}
+                        {% get_available_languages as LANGUAGES %}
+                        {% for lang_code, lang_name in LANGUAGES %}
+                            <option value="{{ lang_code }}" {% if lang_code == CURRENT_LANGUAGE %}selected{% endif %}>
+                                {{ lang_name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                    <input type="hidden" name="next" value="{{ request.path }}">
+                </form>
+            </div>
+        </div>
+    </nav>
     
-    {% block content %}{% endblock %}
+    <div class="main-content fade-in">
+        {% block content %}{% endblock %}
+    </div>
     
     {% block extra_js %}{% endblock %}
 </body>

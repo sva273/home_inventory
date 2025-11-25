@@ -3,22 +3,21 @@
 {% block title %}{{ location.name }} - {% trans "Home Inventory" %}{% endblock %}
 {% block extra_css %}
     <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
         .breadcrumbs {
             background: white;
-            padding: 15px 30px;
-            border-radius: 10px;
+            padding: 15px 25px;
+            border-radius: 12px;
             margin-bottom: 20px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         .breadcrumbs a {
             color: #667eea;
             text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s;
         }
         .breadcrumbs a:hover {
+            color: #5568d3;
             text-decoration: underline;
         }
         .breadcrumbs span {
@@ -27,106 +26,142 @@
         }
         .header {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
         .header h1 {
             color: #333;
-            font-size: 2em;
-            margin-bottom: 15px;
+            font-size: 2.5em;
+            margin-bottom: 20px;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .header-info {
             display: flex;
-            gap: 20px;
+            gap: 15px;
             flex-wrap: wrap;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         .info-item {
-            padding: 10px 20px;
-            background: #f8f9fa;
-            border-radius: 6px;
+            padding: 15px 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
         }
         .info-item strong {
             color: #667eea;
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-item .value {
+            color: #333;
+            font-size: 1.1em;
+            font-weight: 600;
         }
         .section {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
         .section h2 {
             color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
         .card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
             text-decoration: none;
             color: inherit;
             display: block;
         }
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: #e9ecef;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-left-color: #764ba2;
         }
         .card h3 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .card p {
             color: #666;
-            font-size: 0.9em;
-            margin: 5px 0;
+            font-size: 0.95em;
+            margin: 8px 0;
+        }
+        .card strong {
+            color: #333;
         }
         .item-card {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 20px;
+            padding: 20px;
         }
         .item-card img {
-            width: 80px;
-            height: 80px;
+            width: 100px;
+            height: 100px;
             object-fit: cover;
-            border-radius: 6px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .item-card-content {
+            flex: 1;
+        }
+        .item-image-placeholder {
+            width: 100px;
+            height: 100px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 3em;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
         }
         .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: #999;
         }
-        .back-link {
-            display: inline-block;
+        .empty-state-icon {
+            font-size: 4em;
             margin-bottom: 20px;
-            padding: 10px 20px;
-            background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s;
         }
-        .back-link:hover {
-            background: #f8f9fa;
+        .empty-state p {
+            font-size: 1.2em;
         }
         .badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 500;
+            font-size: 0.9em;
+            font-weight: 600;
         }
         .badge-box {
             background: #667eea;
@@ -136,97 +171,118 @@
             background: #28a745;
             color: white;
         }
+        
+        @media (max-width: 768px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .item-card {
+                flex-direction: column;
+                text-align: center;
+            }
+        }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <a href="{% url 'home' %}" class="back-link">← {% trans "Back to Home" %}</a>
-        
-        {% if breadcrumbs %}
-        <div class="breadcrumbs">
-            {% for crumb in breadcrumbs %}
-                <a href="{% url 'location_detail' crumb.id %}">{{ crumb.name }}</a>
-                {% if not forloop.last %}<span>/</span>{% endif %}
+    {% if breadcrumbs %}
+    <div class="breadcrumbs">
+        <a href="{% url 'home' %}">🏠 {% trans "Home" %}</a>
+        {% for crumb in breadcrumbs %}
+            <span>/</span>
+            <a href="{% url 'location_detail' crumb.id %}">{{ crumb.name }}</a>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <div class="header">
+        <h1>
+            {% if location.is_box %}📦{% else %}🏠{% endif %}
+            {{ location.name }}
+        </h1>
+        <div class="header-info">
+            {% if location.room_type %}
+                <div class="info-item">
+                    <strong>{% trans "Room Type" %}</strong>
+                    <span class="value">{{ location.get_room_type_display }}</span>
+                </div>
+            {% endif %}
+            {% if location.is_box %}
+                <div class="info-item">
+                    <strong>{% trans "Type" %}</strong>
+                    <span class="value"><span class="badge badge-box">📦 {% trans "Box" %}</span></span>
+                </div>
+            {% else %}
+                <div class="info-item">
+                    <strong>{% trans "Type" %}</strong>
+                    <span class="value"><span class="badge badge-room">🏠 {% trans "Room" %}</span></span>
+                </div>
+            {% endif %}
+            <div class="info-item">
+                <strong>📦 {% trans "Items" %}</strong>
+                <span class="value">{{ items_count }}</span>
+            </div>
+            <div class="info-item">
+                <strong>📍 {% trans "Sub-locations" %}</strong>
+                <span class="value">{{ children_count }}</span>
+            </div>
+        </div>
+    </div>
+
+    {% if children %}
+    <div class="section">
+        <h2>📍 {% trans "Sub-locations" %} ({{ children_count }})</h2>
+        <div class="grid">
+            {% for child in children %}
+                <a href="{% url 'location_detail' child.id %}" class="card">
+                    <h3>
+                        {% if child.is_box %}📦{% else %}🏠{% endif %}
+                        {{ child.name }}
+                    </h3>
+                    {% if child.room_type %}
+                        <p><strong>{% trans "Type" %}:</strong> {{ child.get_room_type_display }}</p>
+                    {% endif %}
+                    {% if child.is_box %}
+                        <span class="badge badge-box">📦 {% trans "Box" %}</span>
+                    {% else %}
+                        <span class="badge badge-room">🏠 {% trans "Room" %}</span>
+                    {% endif %}
+                    {% if child.items.count > 0 %}
+                        <p style="margin-top: 10px;"><strong>{% trans "Items" %}:</strong> {{ child.items.count }}</p>
+                    {% endif %}
+                </a>
             {% endfor %}
         </div>
-        {% endif %}
-
-        <div class="header">
-            <h1>{{ location.name }}</h1>
-            <div class="header-info">
-                {% if location.room_type %}
-                    <div class="info-item">
-                        <strong>{% trans "Room Type" %}:</strong> {{ location.get_room_type_display }}
-                    </div>
-                {% endif %}
-                {% if location.is_box %}
-                    <div class="info-item">
-                        <span class="badge badge-box">📦 {% trans "Box" %}</span>
-                    </div>
-                {% else %}
-                    <div class="info-item">
-                        <span class="badge badge-room">{% trans "Room" %}</span>
-                    </div>
-                {% endif %}
-                <div class="info-item">
-                    <strong>{% trans "Items" %}:</strong> {{ items_count }}
-                </div>
-                <div class="info-item">
-                    <strong>{% trans "Sub-locations" %}:</strong> {{ children_count }}
-                </div>
-            </div>
-        </div>
-
-        {% if children %}
-        <div class="section">
-            <h2>{% trans "Sub-locations" %} ({{ children_count }})</h2>
-            <div class="grid">
-                {% for child in children %}
-                    <a href="{% url 'location_detail' child.id %}" class="card">
-                        <h3>{{ child.name }}</h3>
-                        {% if child.room_type %}
-                            <p>{% trans "Type" %}: {{ child.get_room_type_display }}</p>
-                        {% endif %}
-                        {% if child.is_box %}
-                            <p>📦 {% trans "Box" %}</p>
-                        {% endif %}
-                        <p>{% trans "Items" %}: {{ child.items.count }}</p>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        {% if items %}
-        <div class="section">
-            <h2>{% trans "Items" %} ({{ items_count }})</h2>
-            <div class="grid">
-                {% for item in items %}
-                    <a href="{% url 'item_detail' item.id %}" class="card item-card">
-                        {% if item.image %}
-                            <img src="{{ item.image.url }}" alt="{{ item.name }}">
-                        {% else %}
-                            <div style="width: 80px; height: 80px; background: #ddd; border-radius: 6px; display: flex; align-items: center; justify-content: center;">
-                                📦
-                            </div>
-                        {% endif %}
-                        <div>
-                            <h3>{{ item.name }}</h3>
-                            <p>{% trans "Quantity" %}: {{ item.quantity }}</p>
-                            <p>{% trans "Condition" %}: {{ item.condition|title }}</p>
-                        </div>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        {% else %}
-        <div class="section">
-            <div class="empty-state">
-                <p>{% trans "No items in this location yet." %}</p>
-            </div>
-        </div>
-        {% endif %}
     </div>
+    {% endif %}
+
+    {% if items %}
+    <div class="section">
+        <h2>📦 {% trans "Items" %} ({{ items_count }})</h2>
+        <div class="grid">
+            {% for item in items %}
+                <a href="{% url 'item_detail' item.id %}" class="card item-card">
+                    {% if item.image %}
+                        <img src="{{ item.image.url }}" alt="{{ item.name }}">
+                    {% else %}
+                        <div class="item-image-placeholder">📦</div>
+                    {% endif %}
+                    <div class="item-card-content">
+                        <h3>{{ item.name }}</h3>
+                        <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ item.quantity }}</p>
+                        <p><strong>{% trans "Condition" %}:</strong> {{ item.get_condition_display }}</p>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% else %}
+    <div class="section">
+        <div class="empty-state">
+            <div class="empty-state-icon">📭</div>
+            <p>{% trans "No items in this location yet." %}</p>
+        </div>
+    </div>
+    {% endif %}
 {% endblock %}
 

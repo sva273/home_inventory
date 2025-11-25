@@ -1,114 +1,150 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ item.name }} - Home Inventory</title>
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ item.name }} - {% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
+        .breadcrumbs {
             background: white;
+            padding: 15px 25px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .breadcrumbs a {
             color: #667eea;
             text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s;
+            font-weight: 500;
+            transition: color 0.3s;
         }
-        .back-link:hover {
-            background: #f8f9fa;
+        .breadcrumbs a:hover {
+            color: #5568d3;
+            text-decoration: underline;
         }
-        .header {
+        .breadcrumbs span {
+            margin: 0 10px;
+            color: #999;
+        }
+        .item-header {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
             display: grid;
-            grid-template-columns: 300px 1fr;
-            gap: 30px;
+            grid-template-columns: 350px 1fr;
+            gap: 40px;
+        }
+        .item-image-container {
+            position: relative;
         }
         .item-image {
             width: 100%;
-            height: 300px;
+            height: 350px;
             object-fit: cover;
-            border-radius: 10px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.15);
         }
         .image-placeholder {
             width: 100%;
-            height: 300px;
-            background: #f8f9fa;
-            border-radius: 10px;
+            height: 350px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 12px;
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 4em;
+            font-size: 6em;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         .item-info h1 {
             color: #333;
-            font-size: 2em;
-            margin-bottom: 20px;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .description {
+            color: #666;
+            line-height: 1.8;
+            font-size: 1.1em;
+            margin-bottom: 25px;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            border-left: 4px solid #667eea;
         }
         .info-grid {
             display: grid;
-            grid-template-columns: repeat(2, 1fr);
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            margin-top: 20px;
+            margin-top: 25px;
         }
         .info-item {
-            padding: 15px;
-            background: #f8f9fa;
-            border-radius: 6px;
+            padding: 20px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border-radius: 10px;
+            border-left: 4px solid #667eea;
         }
         .info-item strong {
             color: #667eea;
             display: block;
-            margin-bottom: 5px;
+            margin-bottom: 8px;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        .info-item .value {
+            color: #333;
+            font-size: 1.2em;
+            font-weight: 600;
+        }
+        .info-item a {
+            color: #667eea;
+            text-decoration: none;
+            font-weight: 600;
+            transition: color 0.3s;
+        }
+        .info-item a:hover {
+            color: #5568d3;
+            text-decoration: underline;
         }
         .section {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
         .section h2 {
             color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
-        }
-        .description {
-            color: #666;
-            line-height: 1.6;
-            font-size: 1.1em;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .logs-list {
             list-style: none;
         }
         .log-item {
-            padding: 15px;
+            padding: 20px;
             background: #f8f9fa;
-            border-radius: 6px;
-            margin-bottom: 10px;
+            border-radius: 10px;
+            margin-bottom: 15px;
             border-left: 4px solid #667eea;
+            transition: all 0.3s;
+        }
+        .log-item:hover {
+            background: #e9ecef;
+            transform: translateX(5px);
         }
         .log-item strong {
             color: #333;
+            font-size: 1.1em;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .log-item .details {
+            color: #666;
+            margin: 8px 0;
         }
         .log-item .timestamp {
             color: #999;
@@ -116,27 +152,42 @@
         }
         .similar-items {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+            gap: 20px;
         }
         .similar-item {
-            background: #f8f9fa;
-            padding: 15px;
-            border-radius: 8px;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 20px;
+            border-radius: 12px;
             text-decoration: none;
             color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
+            transition: all 0.3s;
+            border-left: 4px solid #667eea;
         }
         .similar-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+        }
+        .similar-item h3 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 1.2em;
+        }
+        .similar-item p {
+            color: #666;
+            font-size: 0.9em;
+            margin: 5px 0;
         }
         .badge {
             display: inline-block;
-            padding: 4px 12px;
+            padding: 6px 14px;
             border-radius: 12px;
-            font-size: 0.85em;
-            font-weight: 500;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+        .badge-excellent {
+            background: #17a2b8;
+            color: white;
         }
         .badge-good {
             background: #28a745;
@@ -150,91 +201,121 @@
             background: #dc3545;
             color: white;
         }
-        .badge-excellent {
-            background: #17a2b8;
+        .badge-poor {
+            background: #6c757d;
             color: white;
         }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        
+        @media (max-width: 968px) {
+            .item-header {
+                grid-template-columns: 1fr;
+            }
+            .item-image-container {
+                max-width: 100%;
+            }
+            .item-image, .image-placeholder {
+                height: 250px;
+            }
+        }
     </style>
-</head>
-<body>
-    <div class="container">
-        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
-        {% if item.location %}
-            <a href="{% url 'location_detail' item.location.id %}" class="back-link">← Back to {{ item.location.name }}</a>
-        {% endif %}
+{% endblock %}
 
-        <div class="header">
-            <div>
-                {% if item.image %}
-                    <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image">
-                {% else %}
-                    <div class="image-placeholder">📦</div>
-                {% endif %}
-            </div>
-            <div class="item-info">
-                <h1>{{ item.name }}</h1>
-                {% if item.description %}
-                    <p class="description">{{ item.description }}</p>
-                {% endif %}
-                <div class="info-grid">
+{% block content %}
+    <div class="breadcrumbs">
+        <a href="{% url 'home' %}">🏠 {% trans "Home" %}</a>
+        {% if item.location %}
+            <span>/</span>
+            <a href="{% url 'location_detail' item.location.id %}">{{ item.location.name }}</a>
+        {% endif %}
+        <span>/</span>
+        <span>{{ item.name }}</span>
+    </div>
+
+    <div class="item-header">
+        <div class="item-image-container">
+            {% if item.image %}
+                <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image">
+            {% else %}
+                <div class="image-placeholder">📦</div>
+            {% endif %}
+        </div>
+        <div class="item-info">
+            <h1>{{ item.name }}</h1>
+            {% if item.description %}
+                <div class="description">{{ item.description }}</div>
+            {% endif %}
+            <div class="info-grid">
+                <div class="info-item">
+                    <strong>🔢 {% trans "Quantity" %}</strong>
+                    <span class="value">{{ item.quantity }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>{% trans "Condition" %}</strong>
+                    <span class="value">
+                        <span class="badge badge-{{ item.condition }}">{{ item.get_condition_display }}</span>
+                    </span>
+                </div>
+                {% if item.location %}
                     <div class="info-item">
-                        <strong>Quantity:</strong>
-                        {{ item.quantity }}
-                    </div>
-                    <div class="info-item">
-                        <strong>Condition:</strong>
-                        <span class="badge badge-{{ item.condition }}">{{ item.condition|title }}</span>
-                    </div>
-                    {% if item.location %}
-                        <div class="info-item">
-                            <strong>Location:</strong>
+                        <strong>📍 {% trans "Location" %}</strong>
+                        <span class="value">
                             <a href="{% url 'location_detail' item.location.id %}">{{ item.location.name }}</a>
-                        </div>
-                    {% endif %}
-                    <div class="info-item">
-                        <strong>Created:</strong>
-                        {{ item.created_at|date:"F d, Y" }}
+                        </span>
                     </div>
-                    <div class="info-item">
-                        <strong>Last Updated:</strong>
-                        {{ item.updated_at|date:"F d, Y" }}
-                    </div>
+                {% endif %}
+                <div class="info-item">
+                    <strong>📅 {% trans "Created" %}</strong>
+                    <span class="value">{{ item.created_at|date:"F d, Y" }}</span>
+                </div>
+                <div class="info-item">
+                    <strong>🔄 {% trans "Last Updated" %}</strong>
+                    <span class="value">{{ item.updated_at|date:"F d, Y" }}</span>
                 </div>
             </div>
         </div>
-
-        {% if logs %}
-        <div class="section">
-            <h2>Activity Log</h2>
-            <ul class="logs-list">
-                {% for log in logs %}
-                    <li class="log-item">
-                        <strong>{{ log.action|title }}</strong>
-                        {% if log.details %}
-                            <p>{{ log.details }}</p>
-                        {% endif %}
-                        <span class="timestamp">{{ log.timestamp|date:"F d, Y H:i" }}</span>
-                    </li>
-                {% endfor %}
-            </ul>
-        </div>
-        {% endif %}
-
-        {% if similar_items %}
-        <div class="section">
-            <h2>Similar Items in {{ item.location.name }}</h2>
-            <div class="similar-items">
-                {% for similar in similar_items %}
-                    <a href="{% url 'item_detail' similar.id %}" class="similar-item">
-                        <h3>{{ similar.name }}</h3>
-                        <p>Quantity: {{ similar.quantity }}</p>
-                        <p>Condition: {{ similar.condition|title }}</p>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
     </div>
-</body>
-</html>
 
+    {% if logs %}
+    <div class="section">
+        <h2>📋 {% trans "Activity Log" %}</h2>
+        <ul class="logs-list">
+            {% for log in logs %}
+                <li class="log-item">
+                    <strong>{{ log.get_action_display }}</strong>
+                    {% if log.details %}
+                        <div class="details">{{ log.details }}</div>
+                    {% endif %}
+                    <div class="timestamp">🕐 {{ log.timestamp|date:"F d, Y H:i" }}</div>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+    {% endif %}
+
+    {% if similar_items %}
+    <div class="section">
+        <h2>🔗 {% trans "Similar Items in" %} {{ item.location.name }}</h2>
+        <div class="similar-items">
+            {% for similar in similar_items %}
+                <a href="{% url 'item_detail' similar.id %}" class="similar-item">
+                    <h3>{{ similar.name }}</h3>
+                    <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ similar.quantity }}</p>
+                    <p>
+                        <strong>{% trans "Condition" %}:</strong>
+                        <span class="badge badge-{{ similar.condition }}">{{ similar.get_condition_display }}</span>
+                    </p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

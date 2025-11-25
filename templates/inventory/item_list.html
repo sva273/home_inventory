@@ -1,233 +1,321 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>All Items - Home Inventory</title>
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "All Items" %} - {% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
+        .page-header {
             background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
         }
-        .back-link:hover {
-            background: #f8f9fa;
+        .page-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .filters {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 25px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
+        .filters h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.5em;
+        }
         .filters form {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 15px;
-            flex-wrap: wrap;
             align-items: end;
         }
         .filter-group {
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 8px;
         }
         .filter-group label {
             font-size: 0.9em;
             color: #666;
-            font-weight: 500;
+            font-weight: 600;
         }
         .filter-group input,
         .filter-group select {
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 6px;
+            padding: 12px;
+            border: 2px solid #e0e0e0;
+            border-radius: 8px;
             font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        .filter-group input:focus,
+        .filter-group select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
         }
         .filter-group button {
-            padding: 10px 20px;
+            padding: 12px 24px;
             background: #667eea;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
             font-size: 1em;
-            transition: background 0.3s;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 2px 8px rgba(102, 126, 234, 0.3);
         }
         .filter-group button:hover {
             background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(102, 126, 234, 0.4);
         }
         .items-grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 20px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
         .item-card {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+            padding: 0;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
             text-decoration: none;
             color: inherit;
-            transition: transform 0.2s, box-shadow 0.2s;
-            border-left: 4px solid #667eea;
+            transition: all 0.3s;
+            overflow: hidden;
+            border-top: 4px solid #667eea;
         }
         .item-card:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+            transform: translateY(-5px);
+            box-shadow: 0 8px 30px rgba(0,0,0,0.15);
+        }
+        .item-image-container {
+            width: 100%;
+            height: 200px;
+            overflow: hidden;
+            background: #f8f9fa;
         }
         .item-image {
             width: 100%;
-            height: 150px;
+            height: 100%;
             object-fit: cover;
-            border-radius: 6px;
-            margin-bottom: 15px;
+            transition: transform 0.3s;
+        }
+        .item-card:hover .item-image {
+            transform: scale(1.1);
         }
         .image-placeholder {
             width: 100%;
-            height: 150px;
-            background: #f8f9fa;
-            border-radius: 6px;
+            height: 100%;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
             display: flex;
             align-items: center;
             justify-content: center;
-            font-size: 3em;
-            margin-bottom: 15px;
+            font-size: 4em;
+        }
+        .item-card-content {
+            padding: 20px;
         }
         .item-card h3 {
             color: #333;
-            margin-bottom: 10px;
-            font-size: 1.2em;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
         }
         .item-card p {
             color: #666;
-            margin: 5px 0;
-            font-size: 0.9em;
+            margin: 8px 0;
+            font-size: 0.95em;
+        }
+        .item-card strong {
+            color: #333;
+        }
+        .condition-badge {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .condition-excellent {
+            background: #17a2b8;
+            color: white;
+        }
+        .condition-good {
+            background: #28a745;
+            color: white;
+        }
+        .condition-fair {
+            background: #ffc107;
+            color: #333;
+        }
+        .condition-damaged {
+            background: #dc3545;
+            color: white;
+        }
+        .condition-poor {
+            background: #6c757d;
+            color: white;
         }
         .pagination {
             background: white;
-            padding: 20px;
-            border-radius: 10px;
+            padding: 25px;
+            border-radius: 16px;
             margin-top: 30px;
             display: flex;
             justify-content: center;
+            align-items: center;
             gap: 10px;
+            flex-wrap: wrap;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
         }
         .pagination a,
         .pagination span {
-            padding: 8px 15px;
+            padding: 10px 18px;
             background: #f8f9fa;
             color: #667eea;
             text-decoration: none;
-            border-radius: 6px;
+            border-radius: 8px;
+            font-weight: 500;
+            transition: all 0.3s;
+        }
+        .pagination a:hover {
+            background: #667eea;
+            color: white;
+            transform: translateY(-2px);
         }
         .pagination .current {
             background: #667eea;
             color: white;
+            font-weight: 600;
+        }
+        .empty-state {
+            grid-column: 1 / -1;
+            text-align: center;
+            padding: 60px 20px;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .empty-state p {
+            color: #999;
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .filters form {
+                grid-template-columns: 1fr;
+            }
+            .items-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+{% endblock %}
 
-        <div class="filters">
-            <form method="get">
-                <div class="filter-group">
-                    <label>Search</label>
-                    <input type="text" name="search" value="{{ current_search|default:'' }}" placeholder="Search items...">
-                </div>
-                <div class="filter-group">
-                    <label>Location</label>
-                    <select name="location">
-                        <option value="">All Locations</option>
-                        {% for loc in locations %}
-                            <option value="{{ loc.id }}" {% if current_location == loc.id|stringformat:"s" %}selected{% endif %}>{{ loc.name }}</option>
-                        {% endfor %}
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Condition</label>
-                    <select name="condition">
-                        <option value="">All Conditions</option>
-                        <option value="excellent" {% if current_condition == 'excellent' %}selected{% endif %}>Excellent</option>
-                        <option value="good" {% if current_condition == 'good' %}selected{% endif %}>Good</option>
-                        <option value="fair" {% if current_condition == 'fair' %}selected{% endif %}>Fair</option>
-                        <option value="damaged" {% if current_condition == 'damaged' %}selected{% endif %}>Damaged</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <label>Sort By</label>
-                    <select name="sort">
-                        <option value="-created_at" {% if current_sort == '-created_at' %}selected{% endif %}>Newest First</option>
-                        <option value="created_at" {% if current_sort == 'created_at' %}selected{% endif %}>Oldest First</option>
-                        <option value="name" {% if current_sort == 'name' %}selected{% endif %}>Name (A-Z)</option>
-                        <option value="-name" {% if current_sort == '-name' %}selected{% endif %}>Name (Z-A)</option>
-                    </select>
-                </div>
-                <div class="filter-group">
-                    <button type="submit">Filter</button>
-                </div>
-            </form>
-        </div>
+{% block content %}
+    <div class="page-header">
+        <h1>📦 {% trans "All Items" %}</h1>
+    </div>
 
-        <div class="items-grid">
-            {% for item in page_obj %}
-                <a href="{% url 'item_detail' item.id %}" class="item-card">
+    <div class="filters">
+        <h2>🔍 {% trans "Filters" %}</h2>
+        <form method="get">
+            <div class="filter-group">
+                <label>{% trans "Search" %}</label>
+                <input type="text" name="search" value="{{ current_search|default:'' }}" placeholder="{% trans 'Search items...' %}">
+            </div>
+            <div class="filter-group">
+                <label>{% trans "Location" %}</label>
+                <select name="location">
+                    <option value="">{% trans "All Locations" %}</option>
+                    {% for loc in locations %}
+                        <option value="{{ loc.id }}" {% if current_location == loc.id|stringformat:"s" %}selected{% endif %}>{{ loc.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>{% trans "Condition" %}</label>
+                <select name="condition">
+                    <option value="">{% trans "All Conditions" %}</option>
+                    <option value="excellent" {% if current_condition == 'excellent' %}selected{% endif %}>{% trans "Excellent" %}</option>
+                    <option value="good" {% if current_condition == 'good' %}selected{% endif %}>{% trans "Good" %}</option>
+                    <option value="fair" {% if current_condition == 'fair' %}selected{% endif %}>{% trans "Fair" %}</option>
+                    <option value="damaged" {% if current_condition == 'damaged' %}selected{% endif %}>{% trans "Damaged" %}</option>
+                    <option value="poor" {% if current_condition == 'poor' %}selected{% endif %}>{% trans "Poor" %}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>{% trans "Sort By" %}</label>
+                <select name="sort">
+                    <option value="-created_at" {% if current_sort == '-created_at' %}selected{% endif %}>{% trans "Newest First" %}</option>
+                    <option value="created_at" {% if current_sort == 'created_at' %}selected{% endif %}>{% trans "Oldest First" %}</option>
+                    <option value="name" {% if current_sort == 'name' %}selected{% endif %}>{% trans "Name (A-Z)" %}</option>
+                    <option value="-name" {% if current_sort == '-name' %}selected{% endif %}>{% trans "Name (Z-A)" %}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button type="submit">🔍 {% trans "Filter" %}</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="items-grid">
+        {% for item in page_obj %}
+            <a href="{% url 'item_detail' item.id %}" class="item-card">
+                <div class="item-image-container">
                     {% if item.image %}
                         <img src="{{ item.image.url }}" alt="{{ item.name }}" class="item-image">
                     {% else %}
                         <div class="image-placeholder">📦</div>
                     {% endif %}
+                </div>
+                <div class="item-card-content">
                     <h3>{{ item.name }}</h3>
                     {% if item.location %}
-                        <p><strong>Location:</strong> {{ item.location.name }}</p>
+                        <p><strong>📍 {% trans "Location" %}:</strong> {{ item.location.name }}</p>
                     {% endif %}
-                    <p><strong>Quantity:</strong> {{ item.quantity }}</p>
-                    <p><strong>Condition:</strong> {{ item.condition|title }}</p>
-                </a>
-            {% empty %}
-                <div style="grid-column: 1 / -1; text-align: center; padding: 40px; background: white; border-radius: 10px;">
-                    <p>No items found.</p>
+                    <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ item.quantity }}</p>
+                    <p>
+                        <strong>{% trans "Condition" %}:</strong>
+                        <span class="condition-badge condition-{{ item.condition }}">{{ item.get_condition_display }}</span>
+                    </p>
                 </div>
-            {% endfor %}
-        </div>
+            </a>
+        {% empty %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <p>{% trans "No items found." %}</p>
+            </div>
+        {% endfor %}
+    </div>
 
-        {% if page_obj.has_other_pages %}
-        <div class="pagination">
-            {% if page_obj.has_previous %}
-                <a href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">First</a>
-                <a href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">Previous</a>
-            {% endif %}
-            
-            <span class="current">Page {{ page_obj.number }} of {{ page_obj.paginator.num_pages }}</span>
-            
-            {% if page_obj.has_next %}
-                <a href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">Next</a>
-                <a href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">Last</a>
-            {% endif %}
-        </div>
+    {% if page_obj.has_other_pages %}
+    <div class="pagination">
+        {% if page_obj.has_previous %}
+            <a href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">⏮️ {% trans "First" %}</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">◀️ {% trans "Previous" %}</a>
+        {% endif %}
+        
+        <span class="current">{% blocktrans with page=page_obj.number total=page_obj.paginator.num_pages %}Page {{ page }} of {{ total }}{% endblocktrans %}</span>
+        
+        {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Next" %} ▶️</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Last" %} ⏭️</a>
         {% endif %}
     </div>
-</body>
-</html>
-
+    {% endif %}
+{% endblock %}

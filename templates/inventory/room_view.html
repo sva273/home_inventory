@@ -1,167 +1,202 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>{{ room_name }} - Home Inventory</title>
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{{ room_name }} - {% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
+        .page-header {
             background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s;
-        }
-        .back-link:hover {
-            background: #f8f9fa;
-        }
-        .header {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
             text-align: center;
         }
-        .header h1 {
+        .page-header h1 {
             color: #333;
-            font-size: 2.5em;
+            font-size: 3em;
             margin-bottom: 20px;
+            font-weight: 700;
         }
         .stats {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
+            margin-top: 30px;
         }
         .stat-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px 30px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
         }
         .stat-card h3 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 5px;
+            font-weight: 700;
+        }
+        .stat-card p {
+            opacity: 0.95;
+            font-size: 1.1em;
+            margin: 0;
         }
         .section {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
         .section h2 {
             color: #333;
-            margin-bottom: 20px;
-            font-size: 1.5em;
+            margin-bottom: 25px;
+            font-size: 1.8em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .grid {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
         }
         .card {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
             text-decoration: none;
             color: inherit;
             display: block;
         }
         .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: #e9ecef;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-left-color: #764ba2;
         }
         .card h3 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .card p {
             color: #666;
-            font-size: 0.9em;
-            margin: 5px 0;
+            font-size: 0.95em;
+            margin: 8px 0;
+        }
+        .card strong {
+            color: #333;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .badge-box {
+            background: #667eea;
+            color: white;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+        }
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .empty-state p {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .page-header h1 {
+                font-size: 2em;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
-</head>
-<body>
-    <div class="container">
-        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+{% endblock %}
 
-        <div class="header">
-            <h1>{{ room_name }}</h1>
-            <div class="stats">
-                <div class="stat-card">
-                    <h3>{{ locations_count }}</h3>
-                    <p>Locations</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ items_count }}</h3>
-                    <p>Items</p>
-                </div>
+{% block content %}
+    <div class="page-header">
+        <h1>🏠 {{ room_name }}</h1>
+        <div class="stats">
+            <div class="stat-card">
+                <div class="icon">📍</div>
+                <h3>{{ locations_count }}</h3>
+                <p>{% trans "Locations" %}</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📦</div>
+                <h3>{{ items_count }}</h3>
+                <p>{% trans "Items" %}</p>
             </div>
         </div>
-
-        {% if locations %}
-        <div class="section">
-            <h2>Locations ({{ locations_count }})</h2>
-            <div class="grid">
-                {% for location in locations %}
-                    <a href="{% url 'location_detail' location.id %}" class="card">
-                        <h3>{{ location.name }}</h3>
-                        {% if location.parent %}
-                            <p>Parent: {{ location.parent.name }}</p>
-                        {% endif %}
-                        {% if location.is_box %}
-                            <p>📦 Box</p>
-                        {% endif %}
-                        <p>Items: {{ location.items.count }}</p>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
-
-        {% if items %}
-        <div class="section">
-            <h2>Items ({{ items_count }})</h2>
-            <div class="grid">
-                {% for item in items %}
-                    <a href="{% url 'item_detail' item.id %}" class="card">
-                        <h3>{{ item.name }}</h3>
-                        {% if item.location %}
-                            <p>Location: {{ item.location.name }}</p>
-                        {% endif %}
-                        <p>Quantity: {{ item.quantity }}</p>
-                        <p>Condition: {{ item.condition|title }}</p>
-                    </a>
-                {% endfor %}
-            </div>
-        </div>
-        {% endif %}
     </div>
-</body>
-</html>
 
+    {% if locations %}
+    <div class="section">
+        <h2>📍 {% trans "Locations" %} ({{ locations_count }})</h2>
+        <div class="grid">
+            {% for location in locations %}
+                <a href="{% url 'location_detail' location.id %}" class="card">
+                    <h3>
+                        {% if location.is_box %}📦{% else %}🏠{% endif %}
+                        {{ location.name }}
+                    </h3>
+                    {% if location.parent %}
+                        <p><strong>{% trans "Parent" %}:</strong> {{ location.parent.name }}</p>
+                    {% endif %}
+                    {% if location.is_box %}
+                        <span class="badge badge-box">📦 {% trans "Box" %}</span>
+                    {% endif %}
+                    {% if location.items.count > 0 %}
+                        <p style="margin-top: 10px;"><strong>{% trans "Items" %}:</strong> {{ location.items.count }}</p>
+                    {% endif %}
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+
+    {% if items %}
+    <div class="section">
+        <h2>📦 {% trans "Items" %} ({{ items_count }})</h2>
+        <div class="grid">
+            {% for item in items %}
+                <a href="{% url 'item_detail' item.id %}" class="card">
+                    <h3>📦 {{ item.name }}</h3>
+                    {% if item.location %}
+                        <p><strong>📍 {% trans "Location" %}:</strong> {{ item.location.name }}</p>
+                    {% endif %}
+                    <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ item.quantity }}</p>
+                    <p><strong>{% trans "Condition" %}:</strong> {{ item.get_condition_display }}</p>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

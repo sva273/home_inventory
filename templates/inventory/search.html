@@ -1,189 +1,235 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Search - Home Inventory</title>
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Search" %} - {% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
     <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-            min-height: 100vh;
-            padding: 20px;
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .back-link {
-            display: inline-block;
-            margin-bottom: 20px;
-            padding: 10px 20px;
+        .search-section {
             background: white;
-            color: #667eea;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s;
-        }
-        .back-link:hover {
-            background: #f8f9fa;
-        }
-        .search-box {
-            background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
-        .search-box form {
+        .search-section h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 25px;
             display: flex;
+            align-items: center;
             gap: 10px;
+        }
+        .search-box {
+            display: flex;
+            gap: 15px;
         }
         .search-box input {
             flex: 1;
-            padding: 15px;
-            border: 2px solid #ddd;
-            border-radius: 6px;
-            font-size: 1.1em;
+            padding: 18px 25px;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            font-size: 1.2em;
+            transition: all 0.3s;
+        }
+        .search-box input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
         }
         .search-box button {
-            padding: 15px 30px;
+            padding: 18px 35px;
             background: #667eea;
             color: white;
             border: none;
-            border-radius: 6px;
+            border-radius: 12px;
             cursor: pointer;
-            font-size: 1.1em;
-            transition: background 0.3s;
+            font-size: 1.2em;
+            font-weight: 600;
+            transition: all 0.3s;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
         }
         .search-box button:hover {
             background: #5568d3;
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.4);
         }
-        .results {
+        .results-section {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
         }
-        .results h2 {
+        .results-section h2 {
             color: #333;
             margin-bottom: 20px;
-            font-size: 1.5em;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .results-summary {
             color: #666;
-            margin-bottom: 20px;
-        }
-        .grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
-        }
-        .card {
+            margin-bottom: 30px;
+            font-size: 1.1em;
+            padding: 15px;
             background: #f8f9fa;
-            padding: 20px;
             border-radius: 8px;
             border-left: 4px solid #667eea;
-            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .results-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+        }
+        .result-card {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
             text-decoration: none;
             color: inherit;
             display: block;
         }
-        .card:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: #e9ecef;
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-left-color: #764ba2;
         }
-        .card h3 {
+        .result-card h3 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            font-weight: 600;
         }
-        .card p {
+        .result-card p {
             color: #666;
-            font-size: 0.9em;
-            margin: 5px 0;
+            font-size: 0.95em;
+            margin: 8px 0;
+        }
+        .result-card strong {
+            color: #333;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .badge-box {
+            background: #667eea;
+            color: white;
+        }
+        .badge-room {
+            background: #28a745;
+            color: white;
         }
         .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: #999;
         }
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .empty-state p {
+            font-size: 1.2em;
+        }
+        .section-divider {
+            margin: 40px 0;
+            border-top: 2px solid #e0e0e0;
+        }
+        
+        @media (max-width: 768px) {
+            .search-box {
+                flex-direction: column;
+            }
+            .results-grid {
+                grid-template-columns: 1fr;
+            }
+        }
     </style>
-</head>
-<body>
-    <div class="container">
-        <a href="{% url 'home' %}" class="back-link">← Back to Home</a>
+{% endblock %}
 
-        <div class="search-box">
-            <form method="get">
-                <input type="text" name="q" value="{{ query }}" placeholder="Search locations and items...">
-                <button type="submit">Search</button>
-            </form>
+{% block content %}
+    <div class="search-section">
+        <h1>🔍 {% trans "Search" %}</h1>
+        <form method="get" class="search-box">
+            <input type="text" name="q" value="{{ query }}" placeholder="{% trans 'Search locations and items...' %}" autofocus>
+            <button type="submit">🔍 {% trans "Search" %}</button>
+        </form>
+    </div>
+
+    {% if query %}
+    <div class="results-section">
+        <h2>📋 {% trans "Search Results for" %} "{{ query }}"</h2>
+        <div class="results-summary">
+            ✅ {% blocktrans count locations_count=locations_count %}Found {{ locations_count }} location{% plural %}Found {{ locations_count }} locations{% endblocktrans %}
+            {% blocktrans count items_count=items_count %}and {{ items_count }} item{% plural %}and {{ items_count }} items{% endblocktrans %}
         </div>
 
-        {% if query %}
-        <div class="results">
-            <h2>Search Results for "{{ query }}"</h2>
-            <div class="results-summary">
-                Found {{ locations_count }} location(s) and {{ items_count }} item(s)
-            </div>
-
-            {% if locations %}
-            <h2 style="margin-top: 30px;">Locations ({{ locations_count }})</h2>
-            <div class="grid" style="margin-top: 15px;">
-                {% for location in locations %}
-                    <a href="{% url 'location_detail' location.id %}" class="card">
-                        <h3>{{ location.name }}</h3>
-                        {% if location.room_type %}
-                            <p>Type: {{ location.get_room_type_display }}</p>
-                        {% endif %}
-                        {% if location.parent %}
-                            <p>Parent: {{ location.parent.name }}</p>
-                        {% endif %}
-                        {% if location.is_box %}
-                            <p>📦 Box</p>
-                        {% endif %}
-                    </a>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            {% if items %}
-            <h2 style="margin-top: 30px;">Items ({{ items_count }})</h2>
-            <div class="grid" style="margin-top: 15px;">
-                {% for item in items %}
-                    <a href="{% url 'item_detail' item.id %}" class="card">
-                        <h3>{{ item.name }}</h3>
-                        {% if item.location %}
-                            <p>Location: {{ item.location.name }}</p>
-                        {% endif %}
-                        <p>Quantity: {{ item.quantity }}</p>
-                        <p>Condition: {{ item.condition|title }}</p>
-                    </a>
-                {% endfor %}
-            </div>
-            {% endif %}
-
-            {% if not locations and not items %}
-            <div class="empty-state">
-                <p>No results found for "{{ query }}"</p>
-            </div>
-            {% endif %}
+        {% if locations %}
+        <h2 style="margin-top: 30px; font-size: 1.5em;">📍 {% trans "Locations" %} ({{ locations_count }})</h2>
+        <div class="results-grid" style="margin-top: 20px;">
+            {% for location in locations %}
+                <a href="{% url 'location_detail' location.id %}" class="result-card">
+                    <h3>
+                        {% if location.is_box %}📦{% else %}🏠{% endif %}
+                        {{ location.name }}
+                    </h3>
+                    {% if location.room_type %}
+                        <p><strong>{% trans "Type" %}:</strong> {{ location.get_room_type_display }}</p>
+                    {% endif %}
+                    {% if location.parent %}
+                        <p><strong>{% trans "Parent" %}:</strong> {{ location.parent.name }}</p>
+                    {% endif %}
+                    {% if location.is_box %}
+                        <span class="badge badge-box">📦 {% trans "Box" %}</span>
+                    {% else %}
+                        <span class="badge badge-room">🏠 {% trans "Room" %}</span>
+                    {% endif %}
+                    {% if location.items.count > 0 %}
+                        <p style="margin-top: 10px;"><strong>{% trans "Items" %}:</strong> {{ location.items.count }}</p>
+                    {% endif %}
+                </a>
+            {% endfor %}
         </div>
-        {% else %}
-        <div class="results">
-            <div class="empty-state">
-                <p>Enter a search query to find locations and items</p>
-            </div>
+        {% endif %}
+
+        {% if items %}
+        <div class="section-divider"></div>
+        <h2 style="font-size: 1.5em;">📦 {% trans "Items" %} ({{ items_count }})</h2>
+        <div class="results-grid" style="margin-top: 20px;">
+            {% for item in items %}
+                <a href="{% url 'item_detail' item.id %}" class="result-card">
+                    <h3>📦 {{ item.name }}</h3>
+                    {% if item.location %}
+                        <p><strong>📍 {% trans "Location" %}:</strong> {{ item.location.name }}</p>
+                    {% endif %}
+                    <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ item.quantity }}</p>
+                    <p><strong>{% trans "Condition" %}:</strong> {{ item.get_condition_display }}</p>
+                </a>
+            {% endfor %}
+        </div>
+        {% endif %}
+
+        {% if not locations and not items %}
+        <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <p>{% blocktrans %}No results found for "{{ query }}"{% endblocktrans %}</p>
+            <p style="margin-top: 10px; font-size: 1em;">{% trans "Try a different search term" %}</p>
         </div>
         {% endif %}
     </div>
-</body>
-</html>
-
+    {% else %}
+    <div class="results-section">
+        <div class="empty-state">
+            <div class="empty-state-icon">🔍</div>
+            <p>{% trans "Enter a search query to find locations and items" %}</p>
+        </div>
+    </div>
+    {% endif %}
+{% endblock %}

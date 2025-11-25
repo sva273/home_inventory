@@ -3,153 +3,215 @@
 {% block title %}{% trans "Home Inventory" %}{% endblock %}
 {% block extra_css %}
     <style>
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-        }
-        .header {
+        .hero {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 50px 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
             margin-bottom: 30px;
             text-align: center;
         }
-        .header h1 {
+        .hero h1 {
             color: #333;
-            font-size: 2.5em;
-            margin-bottom: 10px;
+            font-size: 3em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .hero p {
+            color: #666;
+            font-size: 1.2em;
+            margin-bottom: 30px;
         }
         .stats {
-            display: flex;
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
             gap: 20px;
-            justify-content: center;
-            margin-top: 20px;
+            margin: 30px 0;
         }
         .stat-card {
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             color: white;
-            padding: 20px 30px;
-            border-radius: 8px;
+            padding: 30px;
+            border-radius: 12px;
             text-align: center;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+            transition: transform 0.3s;
+        }
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        .stat-card .icon {
+            font-size: 3em;
+            margin-bottom: 10px;
         }
         .stat-card h3 {
-            font-size: 2em;
+            font-size: 2.5em;
             margin-bottom: 5px;
+            font-weight: 700;
         }
         .stat-card p {
-            opacity: 0.9;
+            opacity: 0.95;
+            font-size: 1.1em;
+            margin: 0;
         }
-        .locations {
+        .quick-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 30px;
+        }
+        .locations-section {
             background: white;
-            padding: 30px;
-            border-radius: 10px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+            padding: 40px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
         }
-        .locations h2 {
+        .locations-section h2 {
             color: #333;
-            margin-bottom: 20px;
-            font-size: 1.8em;
+            margin-bottom: 25px;
+            font-size: 2em;
+            display: flex;
+            align-items: center;
+            gap: 10px;
         }
         .location-list {
             display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-            gap: 15px;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
         }
         .location-item {
-            background: #f8f9fa;
-            padding: 20px;
-            border-radius: 8px;
-            border-left: 4px solid #667eea;
-            transition: transform 0.2s, box-shadow 0.2s;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            padding: 25px;
+            border-radius: 12px;
+            border-left: 5px solid #667eea;
+            transition: all 0.3s;
             text-decoration: none;
             color: inherit;
             display: block;
-            cursor: pointer;
         }
         .location-item:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(0,0,0,0.1);
-            background: #e9ecef;
-        }
-        .location-item a {
-            text-decoration: none;
-            color: inherit;
+            transform: translateY(-5px);
+            box-shadow: 0 8px 25px rgba(0,0,0,0.15);
+            border-left-color: #764ba2;
         }
         .location-item h3 {
             color: #333;
-            margin-bottom: 10px;
+            margin-bottom: 12px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+            gap: 8px;
         }
         .location-item p {
             color: #666;
-            font-size: 0.9em;
+            font-size: 0.95em;
+            margin: 5px 0;
+        }
+        .badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-top: 8px;
+        }
+        .badge-room {
+            background: #28a745;
+            color: white;
+        }
+        .badge-box {
+            background: #667eea;
+            color: white;
         }
         .empty-state {
             text-align: center;
-            padding: 40px;
+            padding: 60px 20px;
             color: #999;
         }
-        .admin-link {
-            display: inline-block;
-            margin-top: 20px;
-            padding: 12px 24px;
-            background: #667eea;
-            color: white;
-            text-decoration: none;
-            border-radius: 6px;
-            transition: background 0.3s;
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
         }
-        .admin-link:hover {
-            background: #5568d3;
+        .empty-state p {
+            font-size: 1.2em;
+        }
+        
+        @media (max-width: 768px) {
+            .hero h1 {
+                font-size: 2em;
+            }
+            .stats {
+                grid-template-columns: 1fr;
+            }
+            .location-list {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 {% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="header">
-            <h1>🏠 {% trans "Home Inventory" %}</h1>
-            <p>{% trans "Manage your home inventory efficiently" %}</p>
-            <div class="stats">
-                <div class="stat-card">
-                    <h3>{{ locations_count }}</h3>
-                    <p>{% trans "Locations" %}</p>
-                </div>
-                <div class="stat-card">
-                    <h3>{{ items_count }}</h3>
-                    <p>{% trans "Items" %}</p>
-                </div>
+    <div class="hero">
+        <h1>🏠 {% trans "Home Inventory" %}</h1>
+        <p>{% trans "Manage your home inventory efficiently" %}</p>
+        
+        <div class="stats">
+            <div class="stat-card">
+                <div class="icon">📍</div>
+                <h3>{{ locations_count }}</h3>
+                <p>{% trans "Locations" %}</p>
             </div>
-            <div style="display: flex; gap: 10px; justify-content: center; margin-top: 20px; flex-wrap: wrap;">
-                <a href="{% url 'location_list' %}" class="admin-link">{% trans "All Locations" %}</a>
-                <a href="{% url 'item_list' %}" class="admin-link">{% trans "All Items" %}</a>
-                <a href="{% url 'search' %}" class="admin-link">{% trans "Search" %}</a>
-                <a href="/admin/" class="admin-link">{% trans "Admin Panel" %}</a>
+            <div class="stat-card">
+                <div class="icon">📦</div>
+                <h3>{{ items_count }}</h3>
+                <p>{% trans "Items" %}</p>
+            </div>
+            <div class="stat-card">
+                <div class="icon">📋</div>
+                <h3>{{ boxes_count }}</h3>
+                <p>{% trans "Boxes" %}</p>
             </div>
         </div>
-
-        <div class="locations">
-            <h2>{% trans "Main Locations" %}</h2>
-            {% if locations %}
-                <div class="location-list">
-                    {% for location in locations %}
-                        <a href="{% url 'location_detail' location.id %}" class="location-item">
-                            <h3>{{ location.name }}</h3>
-                            {% if location.room_type %}
-                                <p>Type: {{ location.get_room_type_display }}</p>
-                            {% endif %}
-                            {% if location.is_box %}
-                                <p>📦 Box</p>
-                            {% endif %}
-                        </a>
-                    {% endfor %}
-                </div>
-            {% else %}
-                <div class="empty-state">
-                    <p>{% trans "No locations yet. Add some in the admin panel!" %}</p>
-                </div>
-            {% endif %}
+        
+        <div class="quick-actions">
+            <a href="{% url 'location_list' %}" class="btn">📍 {% trans "All Locations" %}</a>
+            <a href="{% url 'item_list' %}" class="btn">📦 {% trans "All Items" %}</a>
+            <a href="{% url 'search' %}" class="btn">🔍 {% trans "Search" %}</a>
+            <a href="/admin/" class="btn btn-secondary">⚙️ {% trans "Admin Panel" %}</a>
         </div>
     </div>
-{% endblock %}
 
+    <div class="locations-section">
+        <h2>📍 {% trans "Main Locations" %}</h2>
+        {% if locations %}
+            <div class="location-list">
+                {% for location in locations %}
+                    <a href="{% url 'location_detail' location.id %}" class="location-item">
+                        <h3>
+                            {% if location.is_box %}📦{% else %}🏠{% endif %}
+                            {{ location.name }}
+                        </h3>
+                        {% if location.room_type %}
+                            <p><strong>{% trans "Type" %}:</strong> {{ location.get_room_type_display }}</p>
+                        {% endif %}
+                        {% if location.is_box %}
+                            <span class="badge badge-box">📦 {% trans "Box" %}</span>
+                        {% else %}
+                            <span class="badge badge-room">🏠 {% trans "Room" %}</span>
+                        {% endif %}
+                        {% if location.items.count > 0 %}
+                            <p style="margin-top: 10px;"><strong>{% trans "Items" %}:</strong> {{ location.items.count }}</p>
+                        {% endif %}
+                    </a>
+                {% endfor %}
+            </div>
+        {% else %}
+            <div class="empty-state">
+                <div class="empty-state-icon">📭</div>
+                <p>{% trans "No locations yet. Add some in the admin panel!" %}</p>
+                <a href="/admin/" class="btn" style="margin-top: 20px;">⚙️ {% trans "Go to Admin Panel" %}</a>
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
