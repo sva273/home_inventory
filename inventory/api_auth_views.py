@@ -8,6 +8,8 @@ from drf_yasg.utils import swagger_auto_schema
 from drf_yasg import openapi
 from .authentication import create_token, delete_user_token, refresh_token, get_user_token
 
+
+# Create your models here.
 User = get_user_model()
 
 

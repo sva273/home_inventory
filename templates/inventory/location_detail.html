@@ -269,8 +269,22 @@
                     {% endif %}
                     <div class="item-card-content">
                         <h3>{{ item.name }}</h3>
+                        {% if item.category %}
+                            <p>
+                                <span class="badge" style="background-color: {{ item.category.color }}; color: white; padding: 4px 10px; border-radius: 12px; font-size: 0.85em;">
+                                    {% if item.category.icon %}{{ item.category.icon }} {% endif %}{{ item.category.name }}
+                                </span>
+                            </p>
+                        {% endif %}
                         <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ item.quantity }}</p>
                         <p><strong>{% trans "Condition" %}:</strong> {{ item.get_condition_display }}</p>
+                        {% if item.tags.all %}
+                            <p style="margin-top: 8px;">
+                                {% for tag in item.tags.all %}
+                                    <span class="badge" style="background-color: {{ tag.color }}; color: white; padding: 3px 8px; border-radius: 10px; font-size: 0.75em; margin-right: 4px;">{{ tag.name }}</span>
+                                {% endfor %}
+                            </p>
+                        {% endif %}
                     </div>
                 </a>
             {% endfor %}

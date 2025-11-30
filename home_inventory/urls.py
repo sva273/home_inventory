@@ -53,13 +53,20 @@ urlpatterns = [
     path('i18n/setlang/', set_language, name='set_language'),
     path('', RedirectView.as_view(url='/v1/', permanent=False), name='root_redirect'),
     path('v1/', include([
+        # Home page - cached internally (user-specific)
         path('', views.home, name='home'),
+        # List pages
         path('locations/', views.location_list, name='location_list'),
-        path('locations/<uuid:location_id>/', views.location_detail, name='location_detail'),
         path('items/', views.item_list, name='item_list'),
+        # Detail pages
+        path('locations/<uuid:location_id>/', views.location_detail, name='location_detail'),
         path('items/<uuid:item_id>/', views.item_detail, name='item_detail'),
         path('room/<str:room_type>/', views.room_view, name='room_view'),
         path('search/', views.search, name='search'),
+        path('notifications/', views.notification_list, name='notification_list'),
+        path('notifications/<uuid:notification_id>/read/', views.notification_mark_read, name='notification_mark_read'),
+        path('notifications/mark-all-read/', views.notification_mark_all_read, name='notification_mark_all_read'),
+        path('analytics/', views.analytics_dashboard, name='analytics_dashboard'),
         path('api/', include('inventory.api_urls')),
     ])),
     # Swagger URLs
@@ -71,4 +78,12 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    # Django Debug Toolbar
+    try:
+        import debug_toolbar
+        urlpatterns = [
+            path('__debug__/', include(debug_toolbar.urls)),
+        ] + urlpatterns
+    except ImportError:
+        pass  # debug_toolbar not installed
 

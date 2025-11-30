@@ -272,6 +272,26 @@
                         </span>
                     </div>
                 {% endif %}
+                {% if item.category %}
+                    <div class="info-item">
+                        <strong>🏷️ {% trans "Category" %}</strong>
+                        <span class="value">
+                            <span class="badge" style="background-color: {{ item.category.color }}; color: white;">
+                                {% if item.category.icon %}{{ item.category.icon }} {% endif %}{{ item.category.name }}
+                            </span>
+                        </span>
+                    </div>
+                {% endif %}
+                {% if item.tags.all %}
+                    <div class="info-item" style="grid-column: 1 / -1;">
+                        <strong>🏷️ {% trans "Tags" %}</strong>
+                        <span class="value">
+                            {% for tag in item.tags.all %}
+                                <span class="badge" style="background-color: {{ tag.color }}; color: white; margin-right: 5px;">{{ tag.name }}</span>
+                            {% endfor %}
+                        </span>
+                    </div>
+                {% endif %}
                 <div class="info-item">
                     <strong>📅 {% trans "Created" %}</strong>
                     <span class="value">{{ item.created_at|date:"F d, Y" }}</span>

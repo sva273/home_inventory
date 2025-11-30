@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2025-11-24 06:15+0000\n"
+"POT-Creation-Date: 2025-11-30 08:06+0000\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -20,184 +20,1012 @@ msgstr ""
 "n%10<=4 && (n%100<12 || n%100>14) ? 1 : n%10==0 || (n%10>=5 && n%10<=9) || "
 "(n%100>=11 && n%100<=14)? 2 : 3);\n"
 
-#: inventory/models.py:30
-msgid "Location"
-msgstr "Локация"
+#: inventory/admin.py:38 inventory/admin.py:105 inventory/admin.py:196
+#: inventory/admin.py:233 inventory/admin.py:304
+msgid "Basic Information"
+msgstr "Основная информация"
 
-#: inventory/models.py:31 templates/inventory/home.html:116
-msgid "Locations"
-msgstr "Локации"
+#: inventory/admin.py:41
+msgid "Box Settings"
+msgstr "Настройки коробки"
 
-#: inventory/models.py:50
-msgid "Quantity must be greater than 0"
-msgstr "Количество должно быть больше 0"
+#: inventory/admin.py:45 inventory/admin.py:202 inventory/admin.py:239
+msgid "Statistics"
+msgstr "Статистика"
 
-#: inventory/models.py:52
-msgid "Quantity is too large (max 10000)"
-msgstr "Количество слишком большое (максимум 10000)"
+#: inventory/admin.py:49 inventory/admin.py:114 inventory/admin.py:206
+#: inventory/admin.py:243 inventory/admin.py:273 inventory/admin.py:290
+#: inventory/admin.py:311 inventory/admin.py:355
+msgid "Timestamps"
+msgstr "Временные метки"
 
-#: inventory/models.py:66
-msgid "Item"
-msgstr "Предмет"
+#: inventory/admin.py:58
+#, fuzzy
+#| msgid "Room Type"
+msgid "No room type"
+msgstr "Без типа комнаты"
 
-#: inventory/models.py:67 templates/inventory/home.html:120
-#: templates/inventory/location_detail.html:173
-#: templates/inventory/location_detail.html:194
-#: templates/inventory/location_detail.html:203
-#: templates/inventory/location_list.html:173
-msgid "Items"
-msgstr "Предметы"
-
-#: inventory/models.py:86
-msgid "Item Log"
-msgstr "Журнал действий"
-
-#: inventory/models.py:87
-msgid "Item Logs"
-msgstr "Журналы действий"
-
-#: templates/inventory/home.html:3 templates/inventory/home.html:111
-#: templates/inventory/location_detail.html:3
-#: templates/inventory/location_list.html:3
-msgid "Home Inventory"
-msgstr "Домашний инвентарь"
-
-#: templates/inventory/home.html:112
-msgid "Manage your home inventory efficiently"
-msgstr "Эффективно управляйте домашним инвентарем"
-
-#: templates/inventory/home.html:124 templates/inventory/location_list.html:3
-msgid "All Locations"
-msgstr "Все локации"
-
-#: templates/inventory/home.html:125
-msgid "All Items"
-msgstr "Все предметы"
-
-#: templates/inventory/home.html:126 templates/inventory/location_list.html:126
-msgid "Search"
-msgstr "Поиск"
-
-#: templates/inventory/home.html:127
-msgid "Admin Panel"
-msgstr "Панель администратора"
-
-#: templates/inventory/home.html:132
-msgid "Main Locations"
-msgstr "Основные локации"
-
-#: templates/inventory/home.html:149
-msgid "No locations yet. Add some in the admin panel!"
-msgstr "Пока нет локаций. Добавьте их в панели администратора!"
-
-#: templates/inventory/location_detail.html:144
-#: templates/inventory/location_list.html:121
-msgid "Back to Home"
-msgstr "Вернуться на главную"
-
-#: templates/inventory/location_detail.html:160
-#: templates/inventory/location_list.html:130
-#: templates/inventory/location_list.html:151
+#: inventory/admin.py:59 inventory/models.py:57
+#: templates/inventory/location_detail.html:206
+#: templates/inventory/location_list.html:206
+#: templates/inventory/location_list.html:227
 msgid "Room Type"
 msgstr "Тип комнаты"
 
-#: templates/inventory/location_detail.html:165
-#: templates/inventory/location_detail.html:192
-#: templates/inventory/location_list.html:171
-msgid "Box"
-msgstr "Коробка"
+#: inventory/admin.py:63
+msgid "No parent"
+msgstr "Без родителя"
 
-#: templates/inventory/location_detail.html:169
-msgid "Room"
-msgstr "Комната"
-
-#: templates/inventory/location_detail.html:176
-#: templates/inventory/location_detail.html:183
-msgid "Sub-locations"
-msgstr "Подлокации"
-
-#: templates/inventory/location_detail.html:189
-#: templates/inventory/location_list.html:165
-msgid "Type"
-msgstr "Тип"
-
-#: templates/inventory/location_detail.html:216
-msgid "Quantity"
-msgstr "Количество"
-
-#: templates/inventory/location_detail.html:217
-msgid "Condition"
-msgstr "Состояние"
-
-#: templates/inventory/location_detail.html:226
-msgid "No items in this location yet."
-msgstr "В этой локации пока нет предметов."
-
-#: templates/inventory/location_list.html:127
-msgid "Search locations..."
-msgstr "Поиск локаций..."
-
-#: templates/inventory/location_list.html:132
-msgid "All Types"
-msgstr "Все типы"
-
-#: templates/inventory/location_list.html:139
-msgid "Is Box"
-msgstr "Является коробкой"
-
-#: templates/inventory/location_list.html:141
-msgid "All"
-msgstr "Все"
-
-#: templates/inventory/location_list.html:142
-msgid "Boxes Only"
-msgstr "Только коробки"
-
-#: templates/inventory/location_list.html:143
-msgid "Non-Boxes Only"
-msgstr "Только не коробки"
-
-#: templates/inventory/location_list.html:147
-msgid "Sort By"
-msgstr "Сортировать по"
-
-#: templates/inventory/location_list.html:149
-msgid "Name"
-msgstr "Название"
-
-#: templates/inventory/location_list.html:150
-msgid "Name (Z-A)"
-msgstr "Название (Я-А)"
-
-#: templates/inventory/location_list.html:155
-msgid "Filter"
-msgstr "Фильтровать"
-
-#: templates/inventory/location_list.html:168
+#: inventory/admin.py:64 inventory/models.py:58 inventory/serializers.py:46
+#: templates/inventory/analytics_dashboard.html:276
+#: templates/inventory/location_list.html:247
+#: templates/inventory/room_view.html:171 templates/inventory/search.html:187
 msgid "Parent"
 msgstr "Родитель"
 
-#: templates/inventory/location_list.html:177
-msgid "No locations found."
+#: inventory/admin.py:69 inventory/admin.py:125
+msgid "Shared With"
+msgstr "Поделено с"
+
+#: inventory/admin.py:74 inventory/admin.py:215 inventory/admin.py:252
+msgid "Items Count"
+msgstr "Количество предметов"
+
+#: inventory/admin.py:79
+msgid "Children Count"
+msgstr "Количество дочерних элементов"
+
+#: inventory/admin.py:85
+msgid "No QR code"
+msgstr "Нет QR-кода"
+
+#: inventory/admin.py:86
+msgid "QR Code"
+msgstr "QR-код"
+
+#: inventory/admin.py:108
+msgid "Organization"
+msgstr "Организация"
+
+#: inventory/admin.py:111
+msgid "Media"
+msgstr "Медиа"
+
+#: inventory/admin.py:139 inventory/models.py:47
+#: templates/inventory/item_detail.html:287
+msgid "Tags"
+msgstr "Теги"
+
+#: inventory/admin.py:145
+msgid "No image"
+msgstr "Нет изображения"
+
+#: inventory/admin.py:146
+msgid "Image"
+msgstr "Изображение"
+
+#: inventory/admin.py:154
+#, python-format
+msgid "%(count)d items marked as good condition."
+msgstr "%(count)d предметов отмечено как в хорошем состоянии."
+
+#: inventory/admin.py:155
+msgid "Mark selected items as good condition"
+msgstr "Отметить выбранные предметы как в хорошем состоянии"
+
+#: inventory/admin.py:161
+#, python-format
+msgid "%(count)d items marked as damaged."
+msgstr "%(count)d предметов отмечено как поврежденные."
+
+#: inventory/admin.py:162
+msgid "Mark selected items as damaged"
+msgstr "Отметить выбранные предметы как поврежденные"
+
+#: inventory/admin.py:178
+msgid "Details"
+msgstr "Детали"
+
+#: inventory/admin.py:199 inventory/admin.py:236
+msgid "Display"
+msgstr "Отображение"
+
+#: inventory/admin.py:223 inventory/admin.py:260
+msgid "Color Preview"
+msgstr "Предпросмотр цвета"
+
+#: inventory/admin.py:270 inventory/admin.py:287
+msgid "Share Information"
+msgstr "Информация о предоставлении доступа"
+
+#: inventory/admin.py:307
+msgid "Related Object"
+msgstr "Связанный объект"
+
+#: inventory/admin.py:322
+msgid "Message"
+msgstr "Сообщение"
+
+#: inventory/admin.py:328
+#, python-format
+msgid "%(count)d notifications marked as read."
+msgstr "%(count)d уведомлений отмечено как прочитанные."
+
+#: inventory/admin.py:329
+msgid "Mark selected notifications as read"
+msgstr "Отметить выбранные уведомления как прочитанные"
+
+#: inventory/admin.py:335
+#, python-format
+msgid "%(count)d notifications marked as unread."
+msgstr "%(count)d уведомлений отмечено как непрочитанные."
+
+#: inventory/admin.py:336
+msgid "Mark selected notifications as unread"
+msgstr "Отметить выбранные уведомления как непрочитанные"
+
+#: inventory/admin.py:348
+#, fuzzy
+#| msgid "Share Information"
+msgid "Event Information"
+msgstr "Информация о предоставлении доступа"
+
+#: inventory/admin.py:351
+msgid "Metadata"
+msgstr ""
+
+#: inventory/apps.py:8
+msgid "Inventory"
+msgstr "Инвентарь"
+
+#: inventory/choices.py:5
+msgid "Living Room"
+msgstr "Гостиная"
+
+#: inventory/choices.py:6
+msgid "Kitchen"
+msgstr "Кухня"
+
+#: inventory/choices.py:7
+msgid "Children's Room A"
+msgstr "Детская комната A"
+
+#: inventory/choices.py:8
+msgid "Children's Room N"
+msgstr "Детская комната N"
+
+#: inventory/choices.py:9
+msgid "Office"
+msgstr "Кабинет"
+
+#: inventory/choices.py:10
+msgid "Attic"
+msgstr "Мансарда"
+
+#: inventory/choices.py:14 templates/inventory/item_list.html:271
+msgid "Excellent"
+msgstr "Отличное"
+
+#: inventory/choices.py:15 templates/inventory/item_list.html:272
+msgid "Good"
+msgstr "Хорошее"
+
+#: inventory/choices.py:16 templates/inventory/item_list.html:273
+msgid "Fair"
+msgstr "Удовлетворительное"
+
+#: inventory/choices.py:17 templates/inventory/item_list.html:274
+msgid "Damaged"
+msgstr "Поврежденное"
+
+#: inventory/choices.py:18 templates/inventory/item_list.html:275
+msgid "Poor"
+msgstr "Плохое"
+
+#: inventory/choices.py:22 templates/inventory/item_detail.html:296
+msgid "Created"
+msgstr ""
+
+#: inventory/choices.py:23
+msgid "Updated"
+msgstr "Обновлено"
+
+#: inventory/choices.py:24
+msgid "Moved"
+msgstr "Перемещено"
+
+#: inventory/choices.py:25
+msgid "Deleted"
+msgstr "Удалено"
+
+#: inventory/choices.py:29
+msgid "Owner"
+msgstr "Владелец"
+
+#: inventory/choices.py:30
+msgid "Editor"
+msgstr "Редактор"
+
+#: inventory/choices.py:31
+msgid "Viewer"
+msgstr "Наблюдатель"
+
+#: inventory/choices.py:35 inventory/choices.py:51
+#: templates/inventory/notification_list.html:197
+msgid "Item Created"
+msgstr "Предмет создан"
+
+#: inventory/choices.py:36 inventory/choices.py:52
+#: templates/inventory/notification_list.html:198
+msgid "Item Updated"
+msgstr "Предмет обновлен"
+
+#: inventory/choices.py:37 templates/inventory/notification_list.html:199
+msgid "Item Moved"
+msgstr "Предмет перемещен"
+
+#: inventory/choices.py:38 inventory/choices.py:53
+msgid "Item Deleted"
+msgstr "Предмет удален"
+
+#: inventory/choices.py:39 templates/inventory/notification_list.html:200
+msgid "Location Shared"
+msgstr "Локация предоставлена в доступ"
+
+#: inventory/choices.py:40 templates/inventory/notification_list.html:201
+msgid "Item Shared"
+msgstr "Предмет предоставлен в доступ"
+
+#: inventory/choices.py:41 inventory/choices.py:54
+msgid "Location Created"
+msgstr "Локация создана"
+
+#: inventory/choices.py:42 inventory/choices.py:55
+msgid "Location Updated"
+msgstr "Локация обновлена"
+
+#: inventory/choices.py:43 templates/inventory/notification_list.html:202
+msgid "Share Revoked"
+msgstr "Доступ отозван"
+
+#: inventory/choices.py:47
+msgid "Item Viewed"
+msgstr "Просмотр предмета"
+
+#: inventory/choices.py:48
+msgid "Location Viewed"
+msgstr "Просмотр локации"
+
+#: inventory/choices.py:49
+msgid "Item Searched"
+msgstr "Поиск предмета"
+
+#: inventory/choices.py:50
+msgid "Location Searched"
+msgstr "Поиск локации"
+
+#: inventory/choices.py:56
+#, fuzzy
+#| msgid "Location Created"
+msgid "Location Deleted"
+msgstr "Локация создана"
+
+#: inventory/images/validators.py:28
+#, python-format
+msgid "Image file too large. Maximum size is %(max_size)s MB."
+msgstr ""
+"Файл изображения слишком большой. Максимальный размер: %(max_size)s MB."
+
+#: inventory/images/validators.py:56
+#, python-format
+msgid "Invalid image format. Allowed formats: %(formats)s."
+msgstr "Недопустимый формат изображения. Разрешенные форматы: %(formats)s."
+
+#: inventory/images/validators.py:76
+msgid "Invalid image file. Please upload a valid image."
+msgstr ""
+"Недопустимый файл изображения. Пожалуйста, загрузите корректное изображение."
+
+#: inventory/images/validators.py:107
+#, python-format
+msgid ""
+"Image dimensions too large. Maximum size: %(max_width)s x %(max_height)s "
+"pixels."
+msgstr ""
+"Размеры изображения слишком большие. Максимальный размер: %(max_width)s x "
+"%(max_height)s пикселей."
+
+#: inventory/images/validators.py:116
+#, python-format
+msgid ""
+"Image dimensions too small. Minimum size: %(min_width)s x %(min_height)s "
+"pixels."
+msgstr ""
+"Размеры изображения слишком маленькие. Минимальный размер: %(min_width)s x "
+"%(min_height)s пикселей."
+
+#: inventory/images/validators.py:135
+msgid "Could not read image dimensions. Please upload a valid image."
+msgstr ""
+"Не удалось прочитать размеры изображения. Пожалуйста, загрузите корректное "
+"изображение."
+
+#: inventory/models.py:27 templates/inventory/item_detail.html:277
+#: templates/inventory/item_list.html:279
+msgid "Category"
+msgstr "Категория"
+
+#: inventory/models.py:28
+msgid "Categories"
+msgstr "Категории"
+
+#: inventory/models.py:46 templates/inventory/item_list.html:288
+msgid "Tag"
+msgstr "Тег"
+
+#: inventory/models.py:76 templates/inventory/item_detail.html:269
+#: templates/inventory/item_list.html:259
+#: templates/inventory/item_list.html:324
+#: templates/inventory/room_view.html:193 templates/inventory/search.html:210
+msgid "Location"
+msgstr "Локация"
+
+#: inventory/models.py:77 templates/base.html:220
+#: templates/inventory/home.html:163 templates/inventory/room_view.html:150
+#: templates/inventory/room_view.html:162 templates/inventory/search.html:175
+msgid "Locations"
+msgstr "Локации"
+
+#: inventory/models.py:99
+msgid "Location Share"
+msgstr "Доступ к локации"
+
+#: inventory/models.py:100
+msgid "Location Shares"
+msgstr "Доступы к локациям"
+
+#: inventory/models.py:128
+msgid "Upload an image (JPEG, PNG, GIF, WEBP). Maximum size: 5MB."
+msgstr ""
+"Загрузите изображение (JPEG, PNG, GIF, WEBP). Максимальный размер: 5MB."
+
+#: inventory/models.py:136
+msgid "Quantity must be greater than 0"
+msgstr "Количество должно быть больше 0"
+
+#: inventory/models.py:138
+msgid "Quantity is too large (max 10000)"
+msgstr "Количество слишком большое (максимум 10000)"
+
+#: inventory/models.py:165
+msgid "Item"
+msgstr "Предмет"
+
+#: inventory/models.py:166 templates/base.html:223
+#: templates/inventory/home.html:168 templates/inventory/home.html:204
+#: templates/inventory/location_detail.html:222
+#: templates/inventory/location_detail.html:251
+#: templates/inventory/location_detail.html:261
+#: templates/inventory/location_list.html:255
+#: templates/inventory/room_view.html:155
+#: templates/inventory/room_view.html:177
+#: templates/inventory/room_view.html:187 templates/inventory/search.html:195
+#: templates/inventory/search.html:204
+msgid "Items"
+msgstr "Предметы"
+
+#: inventory/models.py:190
+msgid "Item Share"
+msgstr "Доступ к предмету"
+
+#: inventory/models.py:191
+msgid "Item Shares"
+msgstr "Доступы к предметам"
+
+#: inventory/models.py:216
+msgid "Item Log"
+msgstr "Журнал действий"
+
+#: inventory/models.py:217
+msgid "Item Logs"
+msgstr "Журналы действий"
+
+#: inventory/models.py:244
+msgid "Type of related object (Item, Location, etc.)"
+msgstr "Тип связанного объекта (Предмет, Локация и т.д.)"
+
+#: inventory/models.py:246
+msgid "ID of related object"
+msgstr "ID связанного объекта"
+
+#: inventory/models.py:249
+msgid "Additional context data (JSON)"
+msgstr "Дополнительные контекстные данные (JSON)"
+
+#: inventory/models.py:255
+msgid "Notification"
+msgstr "Уведомление"
+
+#: inventory/models.py:256 templates/base.html:230
+#: templates/inventory/notification_list.html:3
+#: templates/inventory/notification_list.html:172
+msgid "Notifications"
+msgstr "Уведомления"
+
+#: inventory/models.py:274
+msgid "Additional event data (search query, filters, etc.)"
+msgstr ""
+
+#: inventory/models.py:280
+msgid "Analytics Event"
+msgstr "Событие аналитики"
+
+#: inventory/models.py:281
+msgid "Analytics Events"
+msgstr "События аналитики"
+
+#: inventory/notifications/services.py:53
+#, python-format
+msgid "New item \"%(item_name)s\" was added to your inventory"
+msgstr "Новый предмет \"%(item_name)s\" был добавлен в ваш инвентарь"
+
+#: inventory/notifications/services.py:66
+#, python-format
+msgid ""
+"New item \"%(item_name)s\" was added to shared location \"%(location_name)s\""
+msgstr ""
+"Новый предмет \"%(item_name)s\" был добавлен в общую локацию "
+"\"%(location_name)s\""
+
+#: inventory/notifications/services.py:82
+#, python-format
+msgid "Item \"%(item_name)s\" was updated"
+msgstr "Предмет \"%(item_name)s\" был обновлен"
+
+#: inventory/notifications/services.py:94
+#, python-format
+msgid "Shared item \"%(item_name)s\" was updated"
+msgstr "Общий предмет \"%(item_name)s\" был обновлен"
+
+#: inventory/notifications/services.py:104
+#: inventory/notifications/services.py:105
+msgid "no location"
+msgstr "нет локации"
+
+#: inventory/notifications/services.py:109
+#, python-format
+msgid ""
+"Item \"%(item_name)s\" was moved from \"%(old_location)s\" to "
+"\"%(new_location)s\""
+msgstr ""
+"Предмет \"%(item_name)s\" был перемещен из \"%(old_location)s\" в "
+"\"%(new_location)s\""
+
+#: inventory/notifications/services.py:130
+#, python-format
+msgid ""
+"Item \"%(item_name)s\" was moved from shared location \"%(location_name)s\""
+msgstr ""
+"Предмет \"%(item_name)s\" был перемещен из общей локации "
+"\"%(location_name)s\""
+
+#: inventory/notifications/services.py:146
+#, python-format
+msgid ""
+"Item \"%(item_name)s\" was moved to shared location \"%(location_name)s\""
+msgstr ""
+"Предмет \"%(item_name)s\" был перемещен в общую локацию \"%(location_name)s\""
+
+#: inventory/notifications/services.py:160
+#, python-format
+msgid "Location \"%(location_name)s\" was shared with you (%(role)s)"
+msgstr ""
+"Локация \"%(location_name)s\" была предоставлена вам в доступ (%(role)s)"
+
+#: inventory/notifications/services.py:177
+#, python-format
+msgid "Item \"%(item_name)s\" was shared with you (%(role)s)"
+msgstr "Предмет \"%(item_name)s\" был предоставлен вам в доступ (%(role)s)"
+
+#: inventory/notifications/services.py:194
+#, python-format
+msgid "Your access to %(object_type)s \"%(object_name)s\" was revoked"
+msgstr "Ваш доступ к %(object_type)s \"%(object_name)s\" был отозван"
+
+#: templates/base.html:213 templates/inventory/analytics_dashboard.html:3
+#: templates/inventory/home.html:3 templates/inventory/home.html:156
+#: templates/inventory/item_detail.html:3 templates/inventory/item_list.html:3
+#: templates/inventory/location_detail.html:3
+#: templates/inventory/location_list.html:3
+#: templates/inventory/notification_list.html:3
+#: templates/inventory/room_view.html:3 templates/inventory/search.html:3
+msgid "Home Inventory"
+msgstr "Домашний инвентарь"
+
+#: templates/base.html:217 templates/inventory/item_detail.html:234
+#: templates/inventory/location_detail.html:190
+msgid "Home"
+msgstr "Главная"
+
+#: templates/base.html:226 templates/inventory/home.html:180
+#: templates/inventory/item_list.html:255
+#: templates/inventory/location_list.html:202 templates/inventory/search.html:3
+#: templates/inventory/search.html:159 templates/inventory/search.html:162
+msgid "Search"
+msgstr "Поиск"
+
+#: templates/base.html:236
+msgid "Analytics"
+msgstr "Аналитика"
+
+#: templates/base.html:240
+msgid "Admin"
+msgstr "Админка"
+
+#: templates/errors/400.html:4 templates/errors/400.html:10
+msgid "Bad Request"
+msgstr "Неверный запрос"
+
+#: templates/errors/400.html:13 templates/errors/403.html:13
+#: templates/errors/404.html:16 templates/errors/500.html:14
+msgid "Go to Home"
+msgstr "На главную"
+
+#: templates/errors/400.html:14 templates/errors/403.html:14
+#: templates/errors/404.html:17
+msgid "Go Back"
+msgstr "Назад"
+
+#: templates/errors/403.html:4 templates/errors/403.html:10
+msgid "Access Forbidden"
+msgstr "Доступ запрещен"
+
+#: templates/errors/404.html:4 templates/errors/404.html:10
+msgid "Page Not Found"
+msgstr "Страница не найдена"
+
+#: templates/errors/500.html:4
+msgid "Server Error"
+msgstr "Ошибка сервера"
+
+#: templates/errors/500.html:10
+msgid "Internal Server Error"
+msgstr "Внутренняя ошибка сервера"
+
+#: templates/errors/500.html:12
+msgid ""
+"We're sorry for the inconvenience. The error has been logged and we'll look "
+"into it."
+msgstr ""
+"Приносим извинения за неудобства. Ошибка была зарегистрирована, и мы "
+"разберемся с ней."
+
+#: templates/errors/500.html:15
+msgid "Reload Page"
+msgstr "Перезагрузить страницу"
+
+#: templates/inventory/analytics_dashboard.html:3
+#: templates/inventory/analytics_dashboard.html:154
+msgid "Analytics Dashboard"
+msgstr "Панель аналитики"
+
+#: templates/inventory/analytics_dashboard.html:155
+msgid "Track usage statistics and popular items/locations"
+msgstr "Отслеживание статистики использования и популярных предметов/локаций"
+
+#: templates/inventory/analytics_dashboard.html:157
+msgid "Last 7 days"
+msgstr "Последние 7 дней"
+
+#: templates/inventory/analytics_dashboard.html:158
+msgid "Last 30 days"
+msgstr "Последние 30 дней"
+
+#: templates/inventory/analytics_dashboard.html:159
+msgid "Last 90 days"
+msgstr "Последние 90 дней"
+
+#: templates/inventory/analytics_dashboard.html:160
+msgid "Last year"
+msgstr "Последний год"
+
+#: templates/inventory/analytics_dashboard.html:167
+#: templates/inventory/analytics_dashboard.html:204
+msgid "Total Events"
+msgstr "Всего событий"
+
+#: templates/inventory/analytics_dashboard.html:169
+msgid "All tracked activities"
+msgstr "Все отслеживаемые действия"
+
+#: templates/inventory/analytics_dashboard.html:172
+#: templates/inventory/analytics_dashboard.html:208
+msgid "Item Views"
+msgstr "Просмотры предметов"
+
+#: templates/inventory/analytics_dashboard.html:174
+msgid "Items viewed"
+msgstr "Просмотрено предметов"
+
+#: templates/inventory/analytics_dashboard.html:177
+#: templates/inventory/analytics_dashboard.html:212
+msgid "Location Views"
+msgstr "Просмотры локаций"
+
+#: templates/inventory/analytics_dashboard.html:179
+msgid "Locations viewed"
+msgstr "Просмотрено локаций"
+
+#: templates/inventory/analytics_dashboard.html:182
+msgid "Searches"
+msgstr "Поиски"
+
+#: templates/inventory/analytics_dashboard.html:184
+msgid "Total searches"
+msgstr "Всего поисков"
+
+#: templates/inventory/analytics_dashboard.html:187
+msgid "Unique Items"
+msgstr "Уникальных предметов"
+
+#: templates/inventory/analytics_dashboard.html:189
+msgid "Different items viewed"
+msgstr "Разных предметов просмотрено"
+
+#: templates/inventory/analytics_dashboard.html:192
+msgid "Unique Locations"
+msgstr "Уникальных локаций"
+
+#: templates/inventory/analytics_dashboard.html:194
+msgid "Different locations viewed"
+msgstr "Разных локаций просмотрено"
+
+#: templates/inventory/analytics_dashboard.html:200
+msgid "Your Activity"
+msgstr "Ваша активность"
+
+#: templates/inventory/analytics_dashboard.html:216
+msgid "Item Searches"
+msgstr "Поиски предметов"
+
+#: templates/inventory/analytics_dashboard.html:220
+msgid "Items Created"
+msgstr "Создано предметов"
+
+#: templates/inventory/analytics_dashboard.html:224
+msgid "Items Updated"
+msgstr "Обновлено предметов"
+
+#: templates/inventory/analytics_dashboard.html:228
+msgid "Locations Created"
+msgstr "Создано локаций"
+
+#: templates/inventory/analytics_dashboard.html:232
+msgid "Locations Updated"
+msgstr "Обновлено локаций"
+
+#: templates/inventory/analytics_dashboard.html:239
+msgid "Most Viewed Items"
+msgstr "Самые просматриваемые предметы"
+
+#: templates/inventory/analytics_dashboard.html:247
+#: templates/inventory/analytics_dashboard.html:273
+msgid "views"
+msgstr "просмотров"
+
+#: templates/inventory/analytics_dashboard.html:258
+msgid "No items viewed in this period"
+msgstr "Нет просмотренных предметов за этот период"
+
+#: templates/inventory/analytics_dashboard.html:265
+msgid "Most Viewed Locations"
+msgstr "Самые просматриваемые локации"
+
+#: templates/inventory/analytics_dashboard.html:284
+msgid "No locations viewed in this period"
+msgstr "Нет просмотренных локаций за этот период"
+
+#: templates/inventory/home.html:157
+msgid "Manage your home inventory efficiently"
+msgstr "Эффективно управляйте домашним инвентарем"
+
+#: templates/inventory/home.html:173
+#, fuzzy
+#| msgid "Boxes Only"
+msgid "Boxes"
+msgstr "Только коробки"
+
+#: templates/inventory/home.html:178 templates/inventory/item_list.html:261
+#: templates/inventory/location_list.html:3
+#: templates/inventory/location_list.html:195
+msgid "All Locations"
+msgstr "Все локации"
+
+#: templates/inventory/home.html:179 templates/inventory/item_list.html:3
+#: templates/inventory/item_list.html:248
+msgid "All Items"
+msgstr "Все предметы"
+
+#: templates/inventory/home.html:181
+msgid "Admin Panel"
+msgstr "Панель администратора"
+
+#: templates/inventory/home.html:186
+msgid "Main Locations"
+msgstr "Основные локации"
+
+#: templates/inventory/home.html:196
+#: templates/inventory/location_detail.html:212
+#: templates/inventory/location_detail.html:217
+#: templates/inventory/location_detail.html:243
+#: templates/inventory/location_list.html:244
+#: templates/inventory/notification_list.html:194
+#: templates/inventory/search.html:184
+msgid "Type"
+msgstr "Тип"
+
+#: templates/inventory/home.html:199
+#: templates/inventory/location_detail.html:213
+#: templates/inventory/location_detail.html:246
+#: templates/inventory/location_list.html:250
+#: templates/inventory/room_view.html:174 templates/inventory/search.html:190
+msgid "Box"
+msgstr "Коробка"
+
+#: templates/inventory/home.html:201
+#: templates/inventory/location_detail.html:218
+#: templates/inventory/location_detail.html:248
+#: templates/inventory/location_list.html:252
+#: templates/inventory/search.html:192
+msgid "Room"
+msgstr "Комната"
+
+#: templates/inventory/home.html:212
+msgid "No locations yet. Add some in the admin panel!"
+msgstr "Пока нет локаций. Добавьте их в панели администратора!"
+
+#: templates/inventory/home.html:213
+#, fuzzy
+#| msgid "Admin Panel"
+msgid "Go to Admin Panel"
+msgstr "Панель администратора"
+
+#: templates/inventory/item_detail.html:258
+#: templates/inventory/item_detail.html:331
+#: templates/inventory/item_list.html:333
+#: templates/inventory/location_detail.html:279
+#: templates/inventory/room_view.html:195 templates/inventory/search.html:212
+msgid "Quantity"
+msgstr "Количество"
+
+#: templates/inventory/item_detail.html:262
+#: templates/inventory/item_detail.html:333
+#: templates/inventory/item_list.html:268
+#: templates/inventory/item_list.html:335
+#: templates/inventory/location_detail.html:280
+#: templates/inventory/room_view.html:196 templates/inventory/search.html:213
+msgid "Condition"
+msgstr "Состояние"
+
+#: templates/inventory/item_detail.html:300
+msgid "Last Updated"
+msgstr ""
+
+#: templates/inventory/item_detail.html:309
+msgid "Activity Log"
+msgstr ""
+
+#: templates/inventory/item_detail.html:326
+msgid "Similar Items in"
+msgstr ""
+
+#: templates/inventory/item_list.html:252
+#: templates/inventory/location_list.html:199
+#, fuzzy
+#| msgid "Filter"
+msgid "Filters"
+msgstr "Фильтровать"
+
+#: templates/inventory/item_list.html:256
+msgid "Search items..."
+msgstr "Поиск предметов..."
+
+#: templates/inventory/item_list.html:270
+msgid "All Conditions"
+msgstr "Все состояния"
+
+#: templates/inventory/item_list.html:281
+msgid "All Categories"
+msgstr "Все категории"
+
+#: templates/inventory/item_list.html:290
+msgid "All Tags"
+msgstr "Все теги"
+
+#: templates/inventory/item_list.html:297
+#: templates/inventory/location_list.html:223
+msgid "Sort By"
+msgstr "Сортировать по"
+
+#: templates/inventory/item_list.html:299
+msgid "Newest First"
+msgstr "Сначала новые"
+
+#: templates/inventory/item_list.html:300
+msgid "Oldest First"
+msgstr "Сначала старые"
+
+#: templates/inventory/item_list.html:301
+#, fuzzy
+#| msgid "Name (Z-A)"
+msgid "Name (A-Z)"
+msgstr "Название (Я-А)"
+
+#: templates/inventory/item_list.html:302
+#: templates/inventory/location_list.html:226
+msgid "Name (Z-A)"
+msgstr "Название (Я-А)"
+
+#: templates/inventory/item_list.html:306
+#: templates/inventory/location_list.html:231
+#: templates/inventory/notification_list.html:206
+msgid "Filter"
+msgstr "Фильтровать"
+
+#: templates/inventory/item_list.html:350
+#, fuzzy
+#| msgid "No locations found."
+msgid "No items found."
 msgstr "Локации не найдены."
 
-#: templates/inventory/location_list.html:185
+#: templates/inventory/item_list.html:358
+#: templates/inventory/location_list.html:269
+#: templates/inventory/notification_list.html:236
 msgid "First"
 msgstr "Первая"
 
-#: templates/inventory/location_list.html:186
+#: templates/inventory/item_list.html:359
+#: templates/inventory/location_list.html:270
+#: templates/inventory/notification_list.html:237
 msgid "Previous"
 msgstr "Предыдущая"
 
-#: templates/inventory/location_list.html:189
+#: templates/inventory/item_list.html:362
+#: templates/inventory/location_list.html:273
 #, python-format
 msgid "Page %(page)s of %(total)s"
 msgstr "Страница %(page)s из %(total)s"
 
-#: templates/inventory/location_list.html:192
+#: templates/inventory/item_list.html:365
+#: templates/inventory/location_list.html:276
+#: templates/inventory/notification_list.html:245
 msgid "Next"
 msgstr "Следующая"
 
-#: templates/inventory/location_list.html:193
+#: templates/inventory/item_list.html:366
+#: templates/inventory/location_list.html:277
+#: templates/inventory/notification_list.html:246
 msgid "Last"
 msgstr "Последняя"
+
+#: templates/inventory/location_detail.html:226
+#: templates/inventory/location_detail.html:234
+msgid "Sub-locations"
+msgstr "Подлокации"
+
+#: templates/inventory/location_detail.html:297
+msgid "No items in this location yet."
+msgstr "В этой локации пока нет предметов."
+
+#: templates/inventory/location_list.html:203
+msgid "Search locations..."
+msgstr "Поиск локаций..."
+
+#: templates/inventory/location_list.html:208
+#: templates/inventory/notification_list.html:196
+msgid "All Types"
+msgstr "Все типы"
+
+#: templates/inventory/location_list.html:215
+msgid "Is Box"
+msgstr "Является коробкой"
+
+#: templates/inventory/location_list.html:217
+#: templates/inventory/notification_list.html:188
+msgid "All"
+msgstr "Все"
+
+#: templates/inventory/location_list.html:218
+msgid "Boxes Only"
+msgstr "Только коробки"
+
+#: templates/inventory/location_list.html:219
+msgid "Non-Boxes Only"
+msgstr "Только не коробки"
+
+#: templates/inventory/location_list.html:225
+msgid "Name"
+msgstr "Название"
+
+#: templates/inventory/location_list.html:261
+msgid "No locations found."
+msgstr "Локации не найдены."
+
+#: templates/inventory/notification_list.html:173
+msgid "Stay updated with your inventory activities"
+msgstr "Будьте в курсе активности вашего инвентаря"
+
+#: templates/inventory/notification_list.html:177
+msgid "Mark All as Read"
+msgstr "Отметить все как прочитанные"
+
+#: templates/inventory/notification_list.html:186
+msgid "Status"
+msgstr "Статус"
+
+#: templates/inventory/notification_list.html:189
+msgid "Unread"
+msgstr "Непрочитанные"
+
+#: templates/inventory/notification_list.html:190
+msgid "Read"
+msgstr "Прочитанные"
+
+#: templates/inventory/notification_list.html:217
+msgid "ago"
+msgstr "назад"
+
+#: templates/inventory/notification_list.html:225
+msgid "Mark as Read"
+msgstr "Отметить как прочитанное"
+
+#: templates/inventory/notification_list.html:241
+msgid "Page"
+msgstr "Страница"
+
+#: templates/inventory/notification_list.html:241
+msgid "of"
+msgstr "из"
+
+#: templates/inventory/notification_list.html:253
+msgid "No notifications found"
+msgstr "Уведомления не найдены"
+
+#: templates/inventory/search.html:161
+msgid "Search locations and items..."
+msgstr "Поиск локаций и предметов..."
+
+#: templates/inventory/search.html:168
+msgid "Search Results for"
+msgstr ""
+
+#: templates/inventory/search.html:170
+#, python-format
+msgid "Found %(locations_count)s location"
+msgid_plural "Found %(locations_count)s locations"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: templates/inventory/search.html:171
+#, python-format
+msgid "and %(items_count)s item"
+msgid_plural "and %(items_count)s items"
+msgstr[0] ""
+msgstr[1] ""
+msgstr[2] ""
+msgstr[3] ""
+
+#: templates/inventory/search.html:222
+#, python-format
+msgid "No results found for \"%(query)s\""
+msgstr ""
+
+#: templates/inventory/search.html:223
+msgid "Try a different search term"
+msgstr ""
+
+#: templates/inventory/search.html:231
+msgid "Enter a search query to find locations and items"
+msgstr "Введите поисковый запрос для поиска локаций и предметов"

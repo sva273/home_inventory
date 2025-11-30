@@ -166,6 +166,23 @@
             background: #6c757d;
             color: white;
         }
+        .category-badge {
+            display: inline-block;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 500;
+            margin-top: 8px;
+            margin-right: 4px;
+        }
+        .tag-badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.75em;
+            font-weight: 500;
+            margin: 2px;
+        }
         .pagination {
             background: white;
             padding: 25px;
@@ -259,6 +276,24 @@
                 </select>
             </div>
             <div class="filter-group">
+                <label>{% trans "Category" %}</label>
+                <select name="category">
+                    <option value="">{% trans "All Categories" %}</option>
+                    {% for category in categories %}
+                        <option value="{{ category.id }}" {% if current_category == category.id|stringformat:"s" %}selected{% endif %}>{{ category.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>{% trans "Tag" %}</label>
+                <select name="tag">
+                    <option value="">{% trans "All Tags" %}</option>
+                    {% for tag in tags %}
+                        <option value="{{ tag.id }}" {% if current_tag == tag.id|stringformat:"s" %}selected{% endif %}>{{ tag.name }}</option>
+                    {% endfor %}
+                </select>
+            </div>
+            <div class="filter-group">
                 <label>{% trans "Sort By" %}</label>
                 <select name="sort">
                     <option value="-created_at" {% if current_sort == '-created_at' %}selected{% endif %}>{% trans "Newest First" %}</option>
@@ -288,11 +323,25 @@
                     {% if item.location %}
                         <p><strong>📍 {% trans "Location" %}:</strong> {{ item.location.name }}</p>
                     {% endif %}
+                    {% if item.category %}
+                        <p>
+                            <span class="category-badge" style="background-color: {{ item.category.color }}; color: white;">
+                                {% if item.category.icon %}{{ item.category.icon }} {% endif %}{{ item.category.name }}
+                            </span>
+                        </p>
+                    {% endif %}
                     <p><strong>🔢 {% trans "Quantity" %}:</strong> {{ item.quantity }}</p>
                     <p>
                         <strong>{% trans "Condition" %}:</strong>
                         <span class="condition-badge condition-{{ item.condition }}">{{ item.get_condition_display }}</span>
                     </p>
+                    {% if item.tags.all %}
+                        <p style="margin-top: 8px;">
+                            {% for tag in item.tags.all %}
+                                <span class="tag-badge" style="background-color: {{ tag.color }}; color: white;">{{ tag.name }}</span>
+                            {% endfor %}
+                        </p>
+                    {% endif %}
                 </div>
             </a>
         {% empty %}
@@ -306,15 +355,15 @@
     {% if page_obj.has_other_pages %}
     <div class="pagination">
         {% if page_obj.has_previous %}
-            <a href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">⏮️ {% trans "First" %}</a>
-            <a href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">◀️ {% trans "Previous" %}</a>
+            <a href="?page=1{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">⏮️ {% trans "First" %}</a>
+            <a href="?page={{ page_obj.previous_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">◀️ {% trans "Previous" %}</a>
         {% endif %}
         
         <span class="current">{% blocktrans with page=page_obj.number total=page_obj.paginator.num_pages %}Page {{ page }} of {{ total }}{% endblocktrans %}</span>
         
         {% if page_obj.has_next %}
-            <a href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Next" %} ▶️</a>
-            <a href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Last" %} ⏭️</a>
+            <a href="?page={{ page_obj.next_page_number }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Next" %} ▶️</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}{% if current_search %}&search={{ current_search }}{% endif %}{% if current_location %}&location={{ current_location }}{% endif %}{% if current_condition %}&condition={{ current_condition }}{% endif %}{% if current_category %}&category={{ current_category }}{% endif %}{% if current_tag %}&tag={{ current_tag }}{% endif %}{% if current_sort %}&sort={{ current_sort }}{% endif %}">{% trans "Last" %} ⏭️</a>
         {% endif %}
     </div>
     {% endif %}

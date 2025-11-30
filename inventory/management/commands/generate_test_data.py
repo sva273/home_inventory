@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand
 from django.utils import timezone
-from inventory.models import Location, Item, ItemLog
+from inventory.models import Location, Item, ItemLog, Category, Tag
 from inventory.choices import ROOM_CHOICES
 import random
 
@@ -20,10 +20,53 @@ class Command(BaseCommand):
             self.stdout.write(self.style.WARNING('Clearing existing data...'))
             ItemLog.objects.all().delete()
             Item.objects.all().delete()
+            Tag.objects.all().delete()
+            Category.objects.all().delete()
             Location.objects.all().delete()
             self.stdout.write(self.style.SUCCESS('Data cleared.'))
 
         self.stdout.write('Generating test data...')
+
+        # Create categories
+        categories_data = [
+            ('Electronics', 'Electronic devices and gadgets', '#667eea', '📱'),
+            ('Furniture', 'Furniture and home decor', '#764ba2', '🪑'),
+            ('Kitchenware', 'Kitchen items and utensils', '#f093fb', '🍳'),
+            ('Toys', 'Children toys and games', '#4facfe', '🧸'),
+            ('Clothing', 'Clothes and accessories', '#43e97b', '👕'),
+            ('Books', 'Books and reading materials', '#fa709a', '📚'),
+            ('Office Supplies', 'Office equipment and supplies', '#fee140', '📎'),
+            ('Tools', 'Tools and hardware', '#30cfd0', '🔧'),
+        ]
+        
+        categories = {}
+        for name, description, color, icon in categories_data:
+            category = Category.objects.create(
+                name=name,
+                description=description,
+                color=color,
+                icon=icon
+            )
+            categories[name] = category
+            self.stdout.write(f'Created category: {category.name}')
+
+        # Create tags
+        tags_data = [
+            ('Valuable', '#dc3545'),
+            ('Fragile', '#ffc107'),
+            ('Seasonal', '#17a2b8'),
+            ('Gift', '#28a745'),
+            ('Vintage', '#6c757d'),
+            ('New', '#20c997'),
+            ('Needs Repair', '#fd7e14'),
+            ('Donate', '#e83e8c'),
+        ]
+        
+        tags = {}
+        for name, color in tags_data:
+            tag = Tag.objects.create(name=name, color=color)
+            tags[name] = tag
+            self.stdout.write(f'Created tag: {tag.name}')
 
         # Room types
         room_types = [choice[0] for choice in ROOM_CHOICES]
@@ -90,58 +133,69 @@ class Command(BaseCommand):
             sub_locations.append(sub)
             self.stdout.write(f'Created sub-location: {sub.name}')
 
-        # Sample items data
+        # Sample items data with categories and tags
         items_data = [
             # Living Room items
-            ('TV', '55 inch Smart TV', 1, 'good', 'living_room'),
-            ('Sofa', 'Comfortable 3-seater sofa', 1, 'good', 'living_room'),
-            ('Coffee Table', 'Wooden coffee table', 1, 'good', 'living_room'),
-            ('Lamp', 'Floor lamp with LED bulb', 2, 'good', 'living_room'),
-            ('Remote Control', 'TV remote control', 1, 'good', 'living_room'),
+            ('TV', '55 inch Smart TV', 1, 'good', 'living_room', 'Electronics', ['Valuable', 'Fragile']),
+            ('Sofa', 'Comfortable 3-seater sofa', 1, 'good', 'living_room', 'Furniture', ['Valuable']),
+            ('Coffee Table', 'Wooden coffee table', 1, 'good', 'living_room', 'Furniture', []),
+            ('Lamp', 'Floor lamp with LED bulb', 2, 'good', 'living_room', 'Furniture', []),
+            ('Remote Control', 'TV remote control', 1, 'good', 'living_room', 'Electronics', []),
             
             # Kitchen items
-            ('Coffee Maker', 'Automatic coffee maker', 1, 'good', 'kitchen'),
-            ('Toaster', '4-slice toaster', 1, 'good', 'kitchen'),
-            ('Cutting Board', 'Wooden cutting board', 2, 'good', 'kitchen'),
-            ('Knife Set', 'Set of 6 kitchen knives', 1, 'good', 'kitchen'),
-            ('Dish Set', 'Dinner plates set', 12, 'good', 'kitchen'),
+            ('Coffee Maker', 'Automatic coffee maker', 1, 'good', 'kitchen', 'Kitchenware', []),
+            ('Toaster', '4-slice toaster', 1, 'good', 'kitchen', 'Kitchenware', []),
+            ('Cutting Board', 'Wooden cutting board', 2, 'good', 'kitchen', 'Kitchenware', []),
+            ('Knife Set', 'Set of 6 kitchen knives', 1, 'good', 'kitchen', 'Kitchenware', ['Fragile']),
+            ('Dish Set', 'Dinner plates set', 12, 'good', 'kitchen', 'Kitchenware', ['Fragile']),
             
             # Children's Room A items
-            ('Teddy Bear', 'Large teddy bear', 1, 'good', 'children_room_a'),
-            ('LEGO Set', 'Classic LEGO building set', 1, 'good', 'children_room_a'),
-            ('Puzzle', '1000 piece jigsaw puzzle', 3, 'good', 'children_room_a'),
-            ('Books', 'Children story books', 15, 'good', 'children_room_a'),
-            ('Toy Car', 'Remote control car', 2, 'damaged', 'children_room_a'),
+            ('Teddy Bear', 'Large teddy bear', 1, 'good', 'children_room_a', 'Toys', ['Gift']),
+            ('LEGO Set', 'Classic LEGO building set', 1, 'good', 'children_room_a', 'Toys', []),
+            ('Puzzle', '1000 piece jigsaw puzzle', 3, 'good', 'children_room_a', 'Toys', []),
+            ('Books', 'Children story books', 15, 'good', 'children_room_a', 'Books', []),
+            ('Toy Car', 'Remote control car', 2, 'damaged', 'children_room_a', 'Toys', ['Needs Repair']),
             
             # Children's Room N items
-            ('Doll', 'Barbie doll', 3, 'good', 'children_room_n'),
-            ('Art Supplies', 'Crayons, markers, paints', 1, 'good', 'children_room_n'),
-            ('Board Game', 'Monopoly game', 1, 'good', 'children_room_n'),
-            ('Stuffed Animal', 'Various stuffed animals', 8, 'good', 'children_room_n'),
+            ('Doll', 'Barbie doll', 3, 'good', 'children_room_n', 'Toys', ['Gift']),
+            ('Art Supplies', 'Crayons, markers, paints', 1, 'good', 'children_room_n', 'Office Supplies', []),
+            ('Board Game', 'Monopoly game', 1, 'good', 'children_room_n', 'Toys', []),
+            ('Stuffed Animal', 'Various stuffed animals', 8, 'good', 'children_room_n', 'Toys', []),
             
             # Office items
-            ('Laptop', 'MacBook Pro 15 inch', 1, 'good', 'office'),
-            ('Monitor', '27 inch 4K monitor', 1, 'good', 'office'),
-            ('Keyboard', 'Mechanical keyboard', 1, 'good', 'office'),
-            ('Mouse', 'Wireless mouse', 1, 'good', 'office'),
-            ('Printer', 'Inkjet printer', 1, 'good', 'office'),
-            ('Desk Lamp', 'LED desk lamp', 1, 'good', 'office'),
-            ('Notebooks', 'Office notebooks', 5, 'good', 'office'),
-            ('Pens', 'Set of ballpoint pens', 20, 'good', 'office'),
+            ('Laptop', 'MacBook Pro 15 inch', 1, 'good', 'office', 'Electronics', ['Valuable', 'Fragile']),
+            ('Monitor', '27 inch 4K monitor', 1, 'good', 'office', 'Electronics', ['Valuable', 'Fragile']),
+            ('Keyboard', 'Mechanical keyboard', 1, 'good', 'office', 'Electronics', []),
+            ('Mouse', 'Wireless mouse', 1, 'good', 'office', 'Electronics', []),
+            ('Printer', 'Inkjet printer', 1, 'good', 'office', 'Electronics', []),
+            ('Desk Lamp', 'LED desk lamp', 1, 'good', 'office', 'Furniture', []),
+            ('Notebooks', 'Office notebooks', 5, 'good', 'office', 'Office Supplies', []),
+            ('Pens', 'Set of ballpoint pens', 20, 'good', 'office', 'Office Supplies', []),
             
             # Attic items
-            ('Old Books', 'Collection of old books', 30, 'good', 'attic'),
-            ('Photo Albums', 'Family photo albums', 5, 'good', 'attic'),
-            ('Vintage Camera', 'Old film camera', 1, 'damaged', 'attic'),
-            ('Suitcase', 'Vintage leather suitcase', 2, 'good', 'attic'),
-            ('Christmas Decorations', 'Holiday decorations box', 1, 'good', 'attic'),
+            ('Old Books', 'Collection of old books', 30, 'good', 'attic', 'Books', ['Vintage']),
+            ('Photo Albums', 'Family photo albums', 5, 'good', 'attic', 'Books', ['Vintage']),
+            ('Vintage Camera', 'Old film camera', 1, 'damaged', 'attic', 'Electronics', ['Vintage', 'Needs Repair']),
+            ('Suitcase', 'Vintage leather suitcase', 2, 'good', 'attic', 'Furniture', ['Vintage']),
+            ('Christmas Decorations', 'Holiday decorations box', 1, 'good', 'attic', 'Furniture', ['Seasonal']),
         ]
 
         # Generate items
         items = []
         conditions = ['good', 'fair', 'damaged', 'excellent']
         
-        for name, description, quantity, condition, room_type in items_data:
+        for item_data in items_data:
+            if len(item_data) == 5:
+                # Old format without category/tags
+                name, description, quantity, condition, room_type = item_data
+                category = None
+                item_tags = []
+            else:
+                # New format with category/tags
+                name, description, quantity, condition, room_type, category_name, tag_names = item_data
+                category = categories.get(category_name)
+                item_tags = [tags[tag_name] for tag_name in tag_names if tag_name in tags]
+            
             # Randomly assign to room, box, or sub-location
             location_choice = random.choice(['room', 'box', 'sub'])
             
@@ -157,8 +211,14 @@ class Command(BaseCommand):
                 description=description,
                 quantity=quantity,
                 condition=condition,
-                location=location
+                location=location,
+                category=category
             )
+            
+            # Add tags
+            if item_tags:
+                item.tags.set(item_tags)
+            
             items.append(item)
             
             # Create logs for some items
@@ -176,6 +236,8 @@ class Command(BaseCommand):
         self.stdout.write(self.style.SUCCESS(
             f'\nSuccessfully generated test data:\n'
             f'  - {Location.objects.count()} locations\n'
+            f'  - {Category.objects.count()} categories\n'
+            f'  - {Tag.objects.count()} tags\n'
             f'  - {Item.objects.count()} items\n'
             f'  - {ItemLog.objects.count()} logs'
         ))

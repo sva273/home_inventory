@@ -24,9 +24,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = config('SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+# Default to True for development, set to False in production via .env
+DEBUG = config('DEBUG', default=True, cast=bool)
 
-ALLOWED_HOSTS = []
+# ALLOWED_HOSTS: required when DEBUG=False
+# For development, default to localhost. For production, set via .env
+ALLOWED_HOSTS = config('ALLOWED_HOSTS', default='localhost,127.0.0.1', cast=lambda v: [s.strip() for s in v.split(',') if s.strip()])
 
 
 # Application definition
@@ -42,8 +45,12 @@ INSTALLED_APPS = [
     'rest_framework',
     'django_filters',
     'drf_yasg',
-    'inventory.apps.InventoryConfig'
+    'inventory.apps.InventoryConfig',
 ]
+
+# Add debug toolbar only in DEBUG mode
+if DEBUG:
+    INSTALLED_APPS += ['debug_toolbar']
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -56,19 +63,27 @@ MIDDLEWARE = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
+# Add debug toolbar middleware only in DEBUG mode
+if DEBUG:
+    try:
+        import debug_toolbar
+        MIDDLEWARE += ['debug_toolbar.middleware.DebugToolbarMiddleware']
+    except ImportError:
+        pass  # debug_toolbar not installed
+
 ROOT_URLCONF = 'home_inventory.urls'
 
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates']
-        ,
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'inventory.notifications.context_processors.notifications',
             ],
         },
     },
@@ -149,15 +164,36 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 GRAPPELLI_ADMIN_TITLE = 'Home Inventory Administration'
 
 # Cache configuration
+# For production, use Redis:
+# CACHES = {
+#     'default': {
+#         'BACKEND': 'django.core.cache.backends.redis.RedisCache',
+#         'LOCATION': 'redis://127.0.0.1:6379/1',
+#         'OPTIONS': {
+#             'CLIENT_CLASS': 'django_redis.client.DefaultClient',
+#         },
+#         'KEY_PREFIX': 'home_inventory',
+#         'TIMEOUT': 300,
+#     }
+# }
+
+# For development, use local memory cache
 CACHES = {
     'default': {
         'BACKEND': 'django.core.cache.backends.locmem.LocMemCache',
         'LOCATION': 'unique-snowflake',
         'OPTIONS': {
             'MAX_ENTRIES': 10000
-        }
+        },
+        'TIMEOUT': 300,  # Default timeout: 5 minutes
+        'KEY_PREFIX': 'home_inventory',
     }
 }
+
+# Cache settings
+CACHE_MIDDLEWARE_ALIAS = 'default'
+CACHE_MIDDLEWARE_SECONDS = 300  # 5 minutes
+CACHE_MIDDLEWARE_KEY_PREFIX = 'home_inventory'
 
 # REST Framework settings
 REST_FRAMEWORK = {
@@ -174,6 +210,7 @@ REST_FRAMEWORK = {
         'rest_framework.filters.SearchFilter',
         'rest_framework.filters.OrderingFilter',
     ],
+    'EXCEPTION_HANDLER': 'inventory.exceptions.handlers.custom_exception_handler',
 }
 
 # Swagger settings for token authentication
@@ -190,3 +227,137 @@ SWAGGER_SETTINGS = {
     'LOGIN_URL': '/admin/login/',
     'LOGOUT_URL': '/admin/logout/',
 }
+
+# Logging configuration
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'formatters': {
+        'verbose': {
+            'format': '{levelname} {asctime} {module} {process:d} {thread:d} {message}',
+            'style': '{',
+        },
+        'simple': {
+            'format': '{levelname} {message}',
+            'style': '{',
+        },
+        'detailed': {
+            'format': '{levelname} {asctime} {name} {pathname}:{lineno} {funcName} {message}',
+            'style': '{',
+        },
+    },
+    'filters': {
+        'require_debug_false': {
+            '()': 'django.utils.log.RequireDebugFalse',
+        },
+    },
+    'handlers': {
+        'console': {
+            'level': 'INFO',
+            'class': 'logging.StreamHandler',
+            'formatter': 'verbose',
+        },
+        'file': {
+            'level': 'ERROR',
+            'class': 'logging.FileHandler',
+            'filename': BASE_DIR / 'logs' / 'django_errors.log',
+            'formatter': 'detailed',
+        },
+        'mail_admins': {
+            'level': 'ERROR',
+            'filters': ['require_debug_false'],
+            'class': 'django.utils.log.AdminEmailHandler',
+            'formatter': 'detailed',
+        },
+    },
+    'root': {
+        'handlers': ['console'],
+        'level': 'INFO',
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+        'django.request': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'django.security': {
+            'handlers': ['file', 'mail_admins'],
+            'level': 'ERROR',
+            'propagate': False,
+        },
+        'inventory': {
+            'handlers': ['console', 'file'],
+            'level': 'INFO',
+            'propagate': False,
+        },
+    },
+}
+
+# Error handlers (for web interface)
+handler404 = 'inventory.exceptions.views.handler404'
+handler500 = 'inventory.exceptions.views.handler500'
+handler403 = 'inventory.exceptions.views.handler403'
+handler400 = 'inventory.exceptions.views.handler400'
+
+# Image validation settings
+MAX_IMAGE_SIZE = 5 * 1024 * 1024  # 5MB in bytes
+ALLOWED_IMAGE_FORMATS = ['JPEG', 'PNG', 'GIF', 'WEBP']
+MAX_IMAGE_WIDTH = 4096  # pixels
+MAX_IMAGE_HEIGHT = 4096  # pixels
+MIN_IMAGE_WIDTH = 1  # pixels
+MIN_IMAGE_HEIGHT = 1  # pixels
+
+# Image processing settings
+IMAGE_MAX_WIDTH = 1920  # pixels (for automatic resizing)
+IMAGE_MAX_HEIGHT = 1920  # pixels (for automatic resizing)
+IMAGE_QUALITY = 85  # JPEG quality (1-100)
+
+# Django Debug Toolbar settings (only in DEBUG mode)
+if DEBUG:
+    try:
+        import debug_toolbar
+        INTERNAL_IPS = [
+            '127.0.0.1',
+            'localhost',
+        ]
+        
+        DEBUG_TOOLBAR_CONFIG = {
+            'SHOW_TOOLBAR_CALLBACK': lambda request: DEBUG,
+            'SHOW_COLLAPSED': True,
+            'SHOW_TEMPLATE_CONTEXT': True,
+        }
+        
+        DEBUG_TOOLBAR_PANELS = [
+            'debug_toolbar.panels.versions.VersionsPanel',
+            'debug_toolbar.panels.timer.TimerPanel',
+            'debug_toolbar.panels.settings.SettingsPanel',
+            'debug_toolbar.panels.headers.HeadersPanel',
+            'debug_toolbar.panels.request.RequestPanel',
+            'debug_toolbar.panels.sql.SQLPanel',
+            'debug_toolbar.panels.staticfiles.StaticFilesPanel',
+            'debug_toolbar.panels.templates.TemplatesPanel',
+            'debug_toolbar.panels.cache.CachePanel',
+            'debug_toolbar.panels.signals.SignalsPanel',
+            'debug_toolbar.panels.logging.LoggingPanel',
+            'debug_toolbar.panels.redirects.RedirectsPanel',
+            'debug_toolbar.panels.profiling.ProfilingPanel',
+        ]
+    except ImportError:
+        pass  # debug_toolbar not installed
+
+# Security settings for production
+# Uncomment and configure these settings when deploying to production:
+# SECURE_SSL_REDIRECT = True  # Redirect all HTTP to HTTPS
+# SESSION_COOKIE_SECURE = True  # Only send session cookie over HTTPS
+# CSRF_COOKIE_SECURE = True  # Only send CSRF cookie over HTTPS
+# SECURE_HSTS_SECONDS = 31536000  # Enable HSTS (1 year)
+# SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+# SECURE_HSTS_PRELOAD = True
+# SECURE_BROWSER_XSS_FILTER = True
+# SECURE_CONTENT_TYPE_NOSNIFF = True
+# X_FRAME_OPTIONS = 'DENY'
