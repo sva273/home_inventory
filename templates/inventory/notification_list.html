@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block title %}{% trans "Notifications" %} - {% trans "Home Inventory" %}{% endblock %}
+{% block extra_css %}
+    <style>
+        .page-header {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.15);
+            margin-bottom: 30px;
+        }
+        .page-header h1 {
+            color: #333;
+            font-size: 2.5em;
+            margin-bottom: 15px;
+            font-weight: 700;
+        }
+        .page-header-actions {
+            display: flex;
+            gap: 10px;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+        .filters {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            margin-bottom: 20px;
+        }
+        .filters form {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+            align-items: flex-end;
+        }
+        .filter-group {
+            display: flex;
+            flex-direction: column;
+            gap: 5px;
+        }
+        .filter-group label {
+            font-size: 0.9em;
+            color: #666;
+            font-weight: 500;
+        }
+        .filter-group select {
+            padding: 8px 12px;
+            border: 1px solid #ddd;
+            border-radius: 6px;
+            font-size: 0.95em;
+            background: white;
+            cursor: pointer;
+        }
+        .notification-list {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+        }
+        .notification-item {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            transition: all 0.3s;
+            border-left: 4px solid #667eea;
+            position: relative;
+        }
+        .notification-item:hover {
+            box-shadow: 0 6px 30px rgba(0,0,0,0.15);
+            transform: translateY(-2px);
+        }
+        .notification-item.unread {
+            background: #f8f9ff;
+            border-left-color: #dc3545;
+        }
+        .notification-item.read {
+            opacity: 0.8;
+            border-left-color: #6c757d;
+        }
+        .notification-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 10px;
+        }
+        .notification-type {
+            display: inline-block;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.85em;
+            font-weight: 600;
+            background: #667eea;
+            color: white;
+        }
+        .notification-time {
+            color: #999;
+            font-size: 0.9em;
+        }
+        .notification-message {
+            color: #333;
+            font-size: 1.05em;
+            line-height: 1.6;
+            margin-bottom: 10px;
+        }
+        .notification-actions {
+            display: flex;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        .notification-actions a {
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-size: 0.9em;
+            transition: all 0.3s;
+        }
+        .btn-mark-read {
+            background: #28a745;
+            color: white;
+        }
+        .btn-mark-read:hover {
+            background: #218838;
+        }
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #999;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+        }
+        .empty-state-icon {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .empty-state p {
+            font-size: 1.2em;
+        }
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 30px;
+            flex-wrap: wrap;
+        }
+        .pagination a, .pagination span {
+            padding: 8px 16px;
+            border-radius: 6px;
+            text-decoration: none;
+            background: white;
+            color: #667eea;
+            border: 1px solid #ddd;
+            transition: all 0.3s;
+        }
+        .pagination a:hover {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+        .pagination .current {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+    </style>
+{% endblock %}
+
+{% block content %}
+    <div class="page-header">
+        <h1>🔔 {% trans "Notifications" %}</h1>
+        <p>{% trans "Stay updated with your inventory activities" %}</p>
+        {% if unread_count > 0 %}
+        <div class="page-header-actions">
+            <a href="{% url 'notification_mark_all_read' %}" class="btn btn-secondary">
+                {% trans "Mark All as Read" %}
+            </a>
+        </div>
+        {% endif %}
+    </div>
+
+    <div class="filters">
+        <form method="get">
+            <div class="filter-group">
+                <label>{% trans "Status" %}</label>
+                <select name="read">
+                    <option value="">{% trans "All" %}</option>
+                    <option value="false" {% if read_filter == 'false' %}selected{% endif %}>{% trans "Unread" %}</option>
+                    <option value="true" {% if read_filter == 'true' %}selected{% endif %}>{% trans "Read" %}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <label>{% trans "Type" %}</label>
+                <select name="type">
+                    <option value="">{% trans "All Types" %}</option>
+                    <option value="item_created" {% if notification_type == 'item_created' %}selected{% endif %}>{% trans "Item Created" %}</option>
+                    <option value="item_updated" {% if notification_type == 'item_updated' %}selected{% endif %}>{% trans "Item Updated" %}</option>
+                    <option value="item_moved" {% if notification_type == 'item_moved' %}selected{% endif %}>{% trans "Item Moved" %}</option>
+                    <option value="location_shared" {% if notification_type == 'location_shared' %}selected{% endif %}>{% trans "Location Shared" %}</option>
+                    <option value="item_shared" {% if notification_type == 'item_shared' %}selected{% endif %}>{% trans "Item Shared" %}</option>
+                    <option value="share_revoked" {% if notification_type == 'share_revoked' %}selected{% endif %}>{% trans "Share Revoked" %}</option>
+                </select>
+            </div>
+            <div class="filter-group">
+                <button type="submit" class="btn">{% trans "Filter" %}</button>
+            </div>
+        </form>
+    </div>
+
+    {% if notifications %}
+    <div class="notification-list">
+        {% for notification in notifications %}
+        <div class="notification-item {% if notification.read %}read{% else %}unread{% endif %}">
+            <div class="notification-header">
+                <span class="notification-type">{{ notification.get_notification_type_display }}</span>
+                <span class="notification-time">{{ notification.created_at|timesince }} {% trans "ago" %}</span>
+            </div>
+            <div class="notification-message">
+                {{ notification.message }}
+            </div>
+            {% if not notification.read %}
+            <div class="notification-actions">
+                <a href="{% url 'notification_mark_read' notification.id %}?next={{ request.path }}" class="btn-mark-read">
+                    {% trans "Mark as Read" %}
+                </a>
+            </div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+
+    {% if notifications.has_other_pages %}
+    <div class="pagination">
+        {% if notifications.has_previous %}
+            <a href="?page=1{% if read_filter %}&read={{ read_filter }}{% endif %}{% if notification_type %}&type={{ notification_type }}{% endif %}">{% trans "First" %}</a>
+            <a href="?page={{ notifications.previous_page_number }}{% if read_filter %}&read={{ read_filter }}{% endif %}{% if notification_type %}&type={{ notification_type }}{% endif %}">{% trans "Previous" %}</a>
+        {% endif %}
+        
+        <span class="current">
+            {% trans "Page" %} {{ notifications.number }} {% trans "of" %} {{ notifications.paginator.num_pages }}
+        </span>
+        
+        {% if notifications.has_next %}
+            <a href="?page={{ notifications.next_page_number }}{% if read_filter %}&read={{ read_filter }}{% endif %}{% if notification_type %}&type={{ notification_type }}{% endif %}">{% trans "Next" %}</a>
+            <a href="?page={{ notifications.paginator.num_pages }}{% if read_filter %}&read={{ read_filter }}{% endif %}{% if notification_type %}&type={{ notification_type }}{% endif %}">{% trans "Last" %}</a>
+        {% endif %}
+    </div>
+    {% endif %}
+    {% else %}
+    <div class="empty-state">
+        <div class="empty-state-icon">🔔</div>
+        <p>{% trans "No notifications found" %}</p>
+    </div>
+    {% endif %}
+{% endblock %}
+
