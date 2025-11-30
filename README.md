@@ -11,6 +11,7 @@ A Django-based web application for managing your home inventory. Organize your i
 
 - 📦 Hierarchical location system (rooms, boxes, sub-locations)
 - 🏷️ Room types (Living Room, Kitchen, Children's Rooms, Office, Attic)
+- 🏷️ **Categories & Tags** - Flexible item organization with colored categories and tags
 - 📱 Automatic QR code generation for boxes
 - 🔍 Advanced search across locations and items
 - 📊 Statistics dashboard
@@ -99,7 +100,9 @@ home_inventory/
 ## Models
 
 - **Location**: Physical locations (rooms, boxes) with hierarchical structure
-- **Item**: Inventory items with quantity, condition, images
+- **Category**: Item categories (Electronics, Furniture, etc.) with color and icon
+- **Tag**: Flexible tags for items with color coding
+- **Item**: Inventory items with quantity, condition, images, category, and tags
 - **ItemLog**: Automatic activity logs (created, updated, moved, deleted)
 
 ## URLs
@@ -113,7 +116,9 @@ home_inventory/
 ### REST API
 - `/v1/api/auth/token/` - Obtain token (POST)
 - `/v1/api/locations/` - Locations CRUD
-- `/v1/api/items/` - Items CRUD
+- `/v1/api/items/` - Items CRUD (filter by category, tags)
+- `/v1/api/categories/` - Categories CRUD
+- `/v1/api/tags/` - Tags CRUD
 - `/v1/api/logs/` - Activity logs
 
 **API Documentation**: `/swagger/` (Swagger UI), `/redoc/` (ReDoc)
@@ -133,7 +138,7 @@ curl http://127.0.0.1:8000/v1/api/locations/ \
   -H "Authorization: Token <your_token>"
 ```
 
-See [API_AUTHENTICATION.md](API_AUTHENTICATION.md) for complete guide.
+See API documentation at `/swagger/` for complete authentication guide.
 
 ## Management Commands
 
@@ -169,10 +174,8 @@ python manage.py compilemessages
 
 ## Additional Resources
 
-- [API_AUTHENTICATION.md](API_AUTHENTICATION.md) - Complete API authentication guide
-- [TRANSLATION_GUIDE.md](TRANSLATION_GUIDE.md) - Translation management
-- [IMPROVEMENTS.md](IMPROVEMENTS.md) - Future enhancements
-- API docs: `/swagger/` when server is running
+- API docs: `/swagger/` when server is running (Swagger UI)
+- API docs: `/redoc/` when server is running (ReDoc)
 
 ## Author
 
